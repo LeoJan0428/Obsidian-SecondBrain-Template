@@ -1,0 +1,52 @@
+@echo off
+REM ==============================================================================
+REM 🔗 SecondBrain AgentOS Windows Environment and Junction Setup Script
+REM ==============================================================================
+
+echo [AgentOS] Configuring Windows Git and Directory Junctions...
+
+cd /d "%~dp0"
+
+REM 1. Configure Git core settings for Windows compatibility and security
+echo [AgentOS] Configuring Git settings...
+git config core.hooksPath 00-AgentOS/hooks
+git config core.quotepath false
+git config core.autocrlf input
+echo [AgentOS] Git core.hooksPath set to 00-AgentOS/hooks (version-controlled).
+echo [AgentOS] Git core.quotepath set to false (UTF-8 Chinese paths enabled).
+echo [AgentOS] Git core.autocrlf set to input (LF preserved).
+
+REM 2. Verify canonical skills directory
+if not exist "00-AgentOS\skills" (
+    echo [ERROR] Canonical directory 00-AgentOS\skills not found!
+    exit /b 1
+)
+
+REM 3. Antigravity (.agents\skills)
+if not exist ".agents" mkdir ".agents"
+if exist ".agents\skills" (
+    echo [.agents\skills] Junction already exists.
+) else (
+    mklink /J ".agents\skills" "00-AgentOS\skills"
+    echo [.agents\skills] Junction created successfully.
+)
+
+REM 4. Claude Code (.claude\skills)
+if not exist ".claude" mkdir ".claude"
+if exist ".claude\skills" (
+    echo [.claude\skills] Junction already exists.
+) else (
+    mklink /J ".claude\skills" "00-AgentOS\skills"
+    echo [.claude\skills] Junction created successfully.
+)
+
+REM 5. Cursor (.cursor\skills)
+if not exist ".cursor" mkdir ".cursor"
+if exist ".cursor\skills" (
+    echo [.cursor\skills] Junction already exists.
+) else (
+    mklink /J ".cursor\skills" "00-AgentOS\skills"
+    echo [.cursor\skills] Junction created successfully.
+)
+
+echo [AgentOS] All Skills Junctions and Git Hooks are active and synchronized!

@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# 🛡️ SecondBrain Git Pre-Commit Security, Cleanliness & Data Shield Hook (v3.0)
+# ==============================================================================
+
+set -u
+
+# 1. 絕對機密、快取與環境狀態污物黑名單 (無條件攔截)
+ABSOLUTE_FORBIDDEN=(
+    "__pycache__"
+    "(^|/)\.env($|\.)"
+    "(^|/)key\.json$"
+    "workspace\.json"
+    "workspace-mobile\.json"
+    "\.DS_Store"
+    "(^|/)scratch/"
+)
+
+# 2. 原始數據目錄與大型二進位模型黑名單 (非 fixtures 區禁止入庫)
+DATA_PATTERNS=(
+    "(^|/)data/.*\.(json|parquet|pkl|csv|sqlite|db)$"
+    "(^|/)output/.*\.(json|parquet|pkl|csv|sqlite|db)$"
+    "(^|/)cache/.*\.(json|parquet|pkl|csv|sqlite|db)$"
+    "\.(parquet|pkl|pt|pth|onnx|h5|bin|sqlite|db)$"
+    "\.npy$"
+)
+
+# 3. 單檔體積上限 (500KB = 512000 Bytes)
+MAX_FILE_BYTES=512000
+
+ERRORS=0
+
+# 使用 -z 與 --diff-filter=ACMR：安全處理含空白/中文路徑，且允許刪除舊違規檔案
+while IFS= read -r -d '' file; do
+    [ -z "$file" ] && continue
+
+    # 檢查 1: 絕對污物與機密攔截
+    for pattern in "${ABSOLUTE_FORBIDDEN[@]}"; do
+        if printf '%s\n' "$file" | grep -E "$pattern" > /dev/null 2>&1; then
+            echo "🛑 [GIT PRE-COMMIT ERROR] Staged file violates repository security policy:"
+            echo "   File   : $file"
+            echo "   Pattern: $pattern"
+            echo "   Action : Unstage via: git reset HEAD -- \"$file\""
+            ERRORS=$((ERRORS + 1))
+            break
+        fi
+    done
+
+    # 檢查 2: 大型數據與模型檔案攔截 (允許 tests/fixtures/ 與 fixtures/ 白名單)
+    IS_FIXTURE=0
+    if printf '%s\n' "$file" | grep -E "(^|/)(tests/fixtures|fixtures)/" > /dev/null 2>&1; then
+        IS_FIXTURE=1
+    fi
+
+    if [ "$IS_FIXTURE" -eq 0 ]; then
+        for pattern in "${DATA_PATTERNS[@]}"; do
+            if printf '%s\n' "$file" | grep -E "$pattern" > /dev/null 2>&1; then
+                echo "🛑 [GIT PRE-COMMIT ERROR] Data/Model artifact outside of fixtures is prohibited:"
+                echo "   File   : $file"
+                echo "   Pattern: $pattern"
+                echo "   Action : Move test samples to 'tests/fixtures/' or add to .gitignore"
+                echo "            Unstage via: git reset HEAD -- \"$file\""
+                ERRORS=$((ERRORS + 1))
+                break
+            fi
+        done
+    fi
+
+    # 檢查 3: 500KB 單檔體積硬上限攔截 (透過 Git Index Blob 跨平台檢驗)
+    FILE_SIZE=$(git cat-file -s ":$file" 2>/dev/null || echo 0)
+    if [ "$FILE_SIZE" -gt "$MAX_FILE_BYTES" ]; then
+        echo "🛑 [GIT PRE-COMMIT ERROR] Staged file exceeds maximum size limit (500KB):"
+        echo "   File   : $file"
+        echo "   Size   : $FILE_SIZE bytes (Limit: $MAX_FILE_BYTES bytes)"
+        echo "   Action : Do not track large files in git. Add to .gitignore or external storage."
+        echo "            Unstage via: git reset HEAD -- \"$file\""
+        ERRORS=$((ERRORS + 1))
+    fi
+done < <(git diff --cached --name-only --diff-filter=ACMR -z)
+
+if [ "$ERRORS" -gt 0 ]; then
+    echo "❌ Commit rejected! Found $ERRORS prohibited file(s) or policy violation(s)."
+    echo "   Please sanitize before committing."
+    exit 1
+fi
+
+exit 0

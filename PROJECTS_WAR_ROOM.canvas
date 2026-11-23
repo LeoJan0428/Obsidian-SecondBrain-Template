@@ -1,0 +1,35 @@
+{
+	"nodes": [
+		{
+			"id": "hub-core",
+			"type": "text",
+			"text": "# 🧭 SecondBrain 專案作戰白板\n\n> [!NOTE]\n> **使用方式**\n> 1. 於 `01-Projects/_active/<Project>/` 建立新專案四件套\n> 2. 將該專案的 `CONTEXT.md` 拖入本白板卡片群組\n> 3. 結案封存時移入 `04-Archive/projects/` 並從白板移除",
+			"x": -180,
+			"y": -100,
+			"width": 360,
+			"height": 200,
+			"color": "6"
+		},
+		{
+			"id": "node-dashboard",
+			"type": "file",
+			"file": "DASHBOARD.md",
+			"x": 260,
+			"y": -150,
+			"width": 420,
+			"height": 300
+		}
+	],
+	"edges": [
+		{
+			"id": "edge-hub-to-dashboard",
+			"fromNode": "hub-core",
+			"fromSide": "right",
+			"toNode": "node-dashboard",
+			"toSide": "left",
+			"toEnd": "arrow",
+			"color": "5",
+			"label": "總覽儀表板"
+		}
+	]
+}

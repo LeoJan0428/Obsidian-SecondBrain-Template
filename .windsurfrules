@@ -1,0 +1,7 @@
+# .windsurfrules: Windsurf AI Core Alignment
+
+> [!IMPORTANT]
+> Windsurf AI MUST strictly adhere to `AGENTS.md` at workspace root.
+> `AGENTS.md` is the Single Source of Truth for Fast Onboarding, Anti-Sycophancy, Proactive Web Search, and Post-Action Hooks.
+
+See [AGENTS.md](./AGENTS.md).

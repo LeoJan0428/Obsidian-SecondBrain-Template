@@ -1,0 +1,20 @@
+{
+  "attachmentFolderPath": "03-Resources/attachments",
+  "userIgnoreFilters": [
+    "**/.gradle/**",
+    "**/.idea/**",
+    "**/.kotlin/**",
+    "**/__pycache__/**",
+    "**/.pytest_cache/**",
+    "**/.venv/**",
+    "**/node_modules/**",
+    "**/*.pcd",
+    "**/*.rdk",
+    "**/build/**",
+    "**/reports/**",
+    "**/data/**",
+    "**/*.parquet",
+    "**/*.pkl",
+    "**/*.npy"
+  ]
+}

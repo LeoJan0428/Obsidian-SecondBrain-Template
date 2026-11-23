@@ -1,0 +1,7 @@
+# ==============================================================================
+# 🧠 Obsidian Knowledge Base - Git Attributes Configuration
+# ==============================================================================
+
+# Ensure Git Hooks maintain pure LF line endings on all operating systems
+00-AgentOS/hooks/* text eol=lf
+*.sh text eol=lf

@@ -1,0 +1,57 @@
+# ==============================================================================
+# 🧠 Obsidian Knowledge Base - Root Git Ignore Specification
+# ==============================================================================
+
+# 1. Obsidian Volatile UI State & Trash (Prevents cross-device sync conflicts)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache/
+.obsidian/plugins/
+.trash/
+
+# 2. Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+
+# 3. Python Bytecode, Caches & Virtual Envs across all notes/scripts
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+**/.pytest_cache/
+**/.ipynb_checkpoints/
+**/.venv/
+**/venv/
+**/env/
+
+# 4. Android / Build Artifacts
+**/.gradle/
+**/build/
+**/*.apk
+**/*.aab
+
+# 5. Large Transient Project Caches & Snapshots
+01-Projects/**/data/snapshots/*.json
+01-Projects/**/data/daily_predictions_cache.json
+**/scratch/
+*.log
+
+# Keep core plugin configs, themes and hotkeys tracked for multi-device sync
+!.obsidian/app.json
+!.obsidian/appearance.json
+!.obsidian/community-plugins.json
+!.obsidian/core-plugins.json
+!.obsidian/hotkeys.json
+
+# 6. Heavy Binary Documents & Media (Keep locally in Obsidian, exclude from Git)
+*.pdf
+*.docx
+*.pptx
+*.mp4
+
+# 7. Agent Tool Customization Junctions (Mirrored from 00-AgentOS/skills)
+.agents/skills
+.claude/skills
+.cursor/skills
+
