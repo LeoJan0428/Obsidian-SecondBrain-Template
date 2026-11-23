@@ -1,41 +1,44 @@
 # 🧠 SecondBrain (AI-Native Knowledge OS)
 
-本系統採用 **Code-Vault 解耦架構**：Obsidian 知識庫作為純 Markdown 治理中心與大腦記憶，獨立程式碼倉儲透過 Multi-Root Workspace (`.code-workspace`) 協同開發，搭配 `00-AgentOS` 技能庫與本地 Git Hooks 自動守門。
+本系統採用 **單倉自包含 + 全域 AgentOS 掛載架構**：各專案程式碼與治理文件同置於獨立 Git 倉儲，無須維護繁瑣的多根工作區；Obsidian 知識庫專注於跨專案長青筆記（`02-Areas/`）並作為全域規則、14 大技能與 Git 安全 Hooks 的唯一事實來源（SSOT），透過 `~/.gemini/config/` 自動套用至本機所有獨立專案。
 
 ---
 
-## 🏗️ 實體目錄拓撲 (Code-Vault Decoupled Layout)
+## 🏗️ 實體目錄拓撲 (Self-Contained + Global AgentOS Layout)
 
 ```text
 <WORKSPACE_ROOT>/
-├── Obsidian-SecondBrain-Template/   # 純 Markdown 知識庫 (Vault + AgentOS + 專案治理四件套 SSOT)
-│   ├── AGENTS.md                    # 全域憲法 (v3.0)
+├── Obsidian-SecondBrain-Template/   # 跨專案長青知識庫 + 全域 AgentOS (Skills / Hooks / AGENTS.md)
+│   ├── AGENTS.md                    # 全域憲法 (v3.0)，同步連結至 ~/.gemini/config/AGENTS.md
 │   ├── 00-AgentOS/                  # Skills / Hooks / Workflows / PROFILE / GLOSSARY
-│   └── 01-Projects/_active/<專案>/  # 僅存四件套：AGENTS.md, CONTEXT.md, SPEC.md, TICKETS.md
-├── repos/                           # 各專案獨立程式碼 Git 倉儲（不含巢狀 Submodule 地獄）
-│   └── <專案>/
-└── workspaces/                      # 一鍵多根開發工作區（同時掛載 Code Repo + Vault）
-    └── <專案>.code-workspace
+│   ├── 02-Areas/                    # 跨專案長青知識資產
+│   └── setup_skills_junctions.bat   # Windows 一鍵全域掛載腳本
+└── repos/                           # 各專案獨立自包含 Git 倉儲
+    └── <專案>/                      # 直接同置程式碼、AGENTS.md、CONTEXT.md、SPEC.md、TICKETS.md 與 ci.yml
 ```
 
 ---
 
 ## ⚡ 跨裝置 Agent 快速開箱建置 (Cross-Device Bootstrap)
 
-### 步驟 1：建立技能目錄鏈結與 Git Hooks
-在 Windows 終端於本庫根目錄執行（自動設定 `core.hooksPath`、UTF-8 路徑，並將 `00-AgentOS/skills` 映射至 `.agents`、`.claude`、`.cursor`）：
+詳細步驟教學請參閱 **[SETUP.md](./SETUP.md)**。
+
+### 步驟 1：一鍵建立技能掛載、全域規則與 Git 安全防線
+在 Windows 終端於本庫根目錄執行（自動設定全域 `core.hooksPath` 金鑰攔截、UTF-8 路徑，並將規則與 14 大技能映射至 `.agents`、`.claude`、`.cursor` 與 `%USERPROFILE%\.gemini\config\`）：
 ```cmd
 .\setup_skills_junctions.bat
 ```
 
-### 步驟 2：安裝全域診斷與測試工具
+### 步驟 2：安裝開發驗證與 GitHub PR/CI 工具（選配）
 ```bash
 pip install ruff pytest pytest-archon deptry
+winget install --id GitHub.cli -e --accept-package-agreements --accept-source-agreements
+gh auth login
 ```
 
-### 步驟 3：啟動開發（Multi-Root Workspace）
-1. 打開對應專案的 `<WORKSPACE_ROOT>/workspaces/<專案>.code-workspace`（同時載入程式碼倉儲與知識庫）。
-2. Agent 依根目錄 **[AGENTS.md](./AGENTS.md)** 執行 30 秒 Fast Onboarding：讀取該專案 `01-Projects/_active/<專案>/AGENTS.md`（$\le 50$ 行）與 `CONTEXT.md`（$\le 60$ 行）。
+### 步驟 3：啟動開發（直接開啟單一專案資料夾）
+1. 在 IDE、桌面 App 或 `agy` CLI **直接開啟 `<WORKSPACE_ROOT>/repos/<專案>/`**，全域規範、14 大技能與 Git 金鑰防線自動生效。
+2. 專案內若包含治理四件套，Agent 依 `AGENTS.md`（$\le 50$ 行）與 `CONTEXT.md`（$\le 60$ 行）完成 30 秒 Fast Onboarding；若為公開倉儲，將 `CONTEXT.md`、`TICKETS.md` 等私人工作檔列入 `.gitignore` 即可。
 
 ---
 
