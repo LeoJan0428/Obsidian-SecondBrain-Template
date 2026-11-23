@@ -4,10 +4,9 @@
 
 ---
 
-## 1. Code-Vault 解耦架構與 30 秒 Fast Onboarding
-* **實體分離原則**：
-  * **知識庫 Vault (`Obsidian-SecondBrain-Template`)**：純 Markdown 資產庫。`01-Projects/_active/<專案>/` **僅存放治理四件套**（`AGENTS.md`、`CONTEXT.md`、`SPEC.md`、`TICKETS.md`），嚴禁混入原始碼、大型二進位檔或數據快取。
-  * **程式碼倉儲 (`<WORKSPACE_ROOT>/repos/<專案>/`)**：各專案獨立 Git Repo，透過 `<WORKSPACE_ROOT>/workspaces/<專案>.code-workspace` 多根工作區與 Vault 同步掛載。
+## 1. 單倉自包含架構與 30 秒 Fast Onboarding
+* **專案自包含原則（預設）**：新專案程式碼與治理四件套（`AGENTS.md`、`CONTEXT.md`、`SPEC.md`、`TICKETS.md`）直接同置於 `<WORKSPACE_ROOT>/repos/<專案>/`（無須建立 `.code-workspace`）；若專案預計公開，將私人工作檔（如 `CONTEXT.md`、`TICKETS.md`）加入 `.gitignore`。
+* **知識庫 Vault (`Obsidian-SecondBrain-Template`)**：專注於跨專案長青知識（`02-Areas/`）、全域技能與 Git Hooks 唯一來源（`00-AgentOS/`）及既有歷史專案；透過 `~/.gemini/config/` 全域掛載，所有獨立 Repo 皆自動繼承全域憲法與技能。
 * **Onboarding 順序（鎖定 $\le 110$ 行）**：
   1. 先讀專案 `AGENTS.md`（$\le 50$ 行）與 `CONTEXT.md`（$\le 60$ 行，含 `repo_path`）。
   2. 僅在 L2/L3 涉及架構或任務拆解時，按需讀取 `SPEC.md` 與 `TICKETS.md`。

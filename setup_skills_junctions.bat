@@ -51,4 +51,16 @@ if exist ".cursor\skills" (
     echo [.cursor\skills] Junction created successfully.
 )
 
+REM 6. Global Antigravity Customizations (%USERPROFILE%\.gemini\config)
+if not exist "%USERPROFILE%\.gemini\config" mkdir "%USERPROFILE%\.gemini\config"
+if exist "%USERPROFILE%\.gemini\config\skills" (
+    echo [%USERPROFILE%\.gemini\config\skills] Junction already exists.
+) else (
+    mklink /J "%USERPROFILE%\.gemini\config\skills" "%CD%\00-AgentOS\skills"
+    echo [%USERPROFILE%\.gemini\config\skills] Junction created successfully.
+)
+if exist "%USERPROFILE%\.gemini\config\AGENTS.md" del /f /q "%USERPROFILE%\.gemini\config\AGENTS.md"
+mklink /H "%USERPROFILE%\.gemini\config\AGENTS.md" "%CD%\AGENTS.md" >nul 2>&1 || copy /Y "%CD%\AGENTS.md" "%USERPROFILE%\.gemini\config\AGENTS.md" >nul
+echo [%USERPROFILE%\.gemini\config\AGENTS.md] Synced with Vault AGENTS.md.
+
 echo [AgentOS] All Skills Junctions and Git Hooks are active and synchronized!
