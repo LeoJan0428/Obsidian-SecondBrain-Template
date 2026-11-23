@@ -49,6 +49,7 @@
 ## 5. 知識升遷與收尾勾點
 * **滾動窗口與規則固化**：修剪 `CONTEXT.md`（$\le 60$ 行、留最近 3 筆）前，先將永久禁忌升遷至專案 `AGENTS.md`、架構變更升遷至 `SPEC.md`。當專案 `AGENTS.md` 逼近 50 行上限時，將文字規則**固化為 Linter / 型別 / 測試斷言**後精簡條文。
 * **收尾檢查**：① 通過專案本地驗證指令（Exit Code `0`）② 同步 `CONTEXT.md` / 專案 `AGENTS.md` ③ 精確 `git add <path>`（禁 `git add .`）與 Conventional Commits（由 `00-AgentOS/hooks/` 強制守門）④ 異動 Skill 或全域依賴時，同步 [README.md](./README.md) ⑤ 單次對話達 20+ 輪主動提醒 `/handoff`。
+* **自動分支與 PR/CI 閉環**：凡目標專案已綁定 GitHub Remote 且具備 `.github/workflows/ci.yml`，L2/L3 開發動手前若位於 `main`/`master` 須自動開功能分支（`feat/`、`fix/`、`ci/`）；本機驗證並提交後自動推送、建立 PR 並監看 CI（`gh pr checks --watch`），紅燈時以 `gh run view --log-failed` 除錯（受兩次失敗熔斷保護），全綠燈後回報 PR 連結交由人類審核（**嚴禁自動 Merge**）。
 
 ---
 

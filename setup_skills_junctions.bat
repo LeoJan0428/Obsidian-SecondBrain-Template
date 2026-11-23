@@ -10,9 +10,11 @@ cd /d "%~dp0"
 REM 1. Configure Git core settings for Windows compatibility and security
 echo [AgentOS] Configuring Git settings...
 git config core.hooksPath 00-AgentOS/hooks
+set "HOOKS_DIR=%CD:\=/%/00-AgentOS/hooks"
+git config --global core.hooksPath "%HOOKS_DIR%"
 git config core.quotepath false
 git config core.autocrlf input
-echo [AgentOS] Git core.hooksPath set to 00-AgentOS/hooks (version-controlled).
+echo [AgentOS] Git local and global core.hooksPath set to "%HOOKS_DIR%".
 echo [AgentOS] Git core.quotepath set to false (UTF-8 Chinese paths enabled).
 echo [AgentOS] Git core.autocrlf set to input (LF preserved).
 
