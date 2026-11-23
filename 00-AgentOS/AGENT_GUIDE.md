@@ -2,7 +2,7 @@
 
 > [!IMPORTANT]
 > **本手冊定位：AgentOS 工作流執行與提問模板 SOP**  
-> 全域核心鐵律（Code-Vault 解耦、反迎合求真、條件式遙測、強制外檢、50/60 行上限）請以根目錄 [**AGENTS.md**](../AGENTS.md) 為唯一事實來源。
+> 全域核心鐵律（單倉自包含 + 全域 AgentOS、反迎合求真、條件式遙測、強制外檢、50/60 行上限）請以根目錄 [**AGENTS.md**](../AGENTS.md) 為唯一事實來源。
 
 ---
 
@@ -26,17 +26,17 @@ flowchart TD
     D --> E[/tdd<br/>先寫紅燈測試與契約斷言]
     E --> F[/implement<br/>鎖定單一 Ticket 綠燈實作與重構]
     F --> G[/code-review<br/>標準與架構雙軸度審查]
-    G --> H[原子化 Commit<br/>Code Repo 與 Vault 各自獨立提交]
+    G --> H[原子化 Commit<br/>專案倉儲獨立提交與 PR/CI 閉環]
     H --> I[/handoff<br/>更新 CONTEXT.md 與知識升遷]
 ```
 
 ### 階段職責與關鍵守門：
 1. **`/grill-with-docs`**：結合 `02-Areas/` 既有筆記進行挑戰式提問，釐清架構邊界與隱含假設。
-2. **`/to-spec`**：產出 `SPEC.md`，並同步從 `05-Templates/Project_AGENTS_Template.md` 冷啟動專案 `AGENTS.md` 初版（綁定 `repo_path`）。
+2. **`/to-spec`**：產出 `./SPEC.md`，並同步從 `05-Templates/Project_AGENTS_Template.md` 冷啟動專案根目錄 `./AGENTS.md` 初版。
 3. **`/to-tickets`**：將 `SPEC.md` 拆解為獨立、具 Given/When/Then 驗收條件的 `TICKETS.md`。
 4. **`/tdd` $\to$ `/implement`**：嚴格先紅燈後綠燈，鎖定單一 Ticket 範圍，嚴禁順手改動無關檔案。
 5. **`/code-review`**：從標準面、規格面、架構依賴與資源生命週期雙軸審查。
-6. **`commit`**：Code Repo（`<WORKSPACE_ROOT>/repos/<專案>/`）與 Vault（`01-Projects/_active/<專案>/`）各自獨立原子提交；禁 `git add .`，交由 `00-AgentOS/hooks/` 自動守門。
+6. **`commit`**：於專案倉儲（`<WORKSPACE_ROOT>/repos/<專案>/`）獨立原子提交（僅舊版解耦專案需雙邊提交）；禁 `git add .`，交由全域 `00-AgentOS/hooks/` 自動守門。
 7. **`/handoff`**：執行知識升遷（`CONTEXT.md` $\to$ `AGENTS.md` / `SPEC.md` / `02-Areas/`）、修剪滾動視窗並壓縮上下文。
 
 > 💡 **外檢前置硬阻斷**：進入架構設計或技術選型前，凡涉及業界實務、第三方庫或報錯，必須先調用 `web-research` 技能（遵循 `[AGENTS.md]` §3 硬阻斷）。  
@@ -53,20 +53,19 @@ flowchart TD
 
 ## 💬 4. 使用者提問模板響應準則
 
-* **模板 A（新專案 / 新 Idea）**：先檢索 `02-Areas/` 既有知識 $\to$ 執行 `/grill-with-docs` 提出 3–5 個架構邊界與 Trade-off 問題 $\to$ 確認後才建立 Vault 四件套與 `repos/<專案>/` + `.code-workspace`。
+* **模板 A（新專案 / 新 Idea）**：先檢索 `02-Areas/` 既有知識 $\to$ 執行 `/grill-with-docs` 提出 3–5 個架構邊界與 Trade-off 問題 $\to$ 確認後於 `repos/<專案>/` 單倉建立程式碼與治理四件套（無須建立 `.code-workspace`）。
 * **模板 B（既有專案推進 / 除錯）**：判定 L1/L2 $\to$ 執行 30 秒 Fast Onboarding（讀 `AGENTS.md` + `CONTEXT.md`）$\to$ 確認目標 Ticket $\to$ TDD 優先。
 * **模板 C（重大架構決策 ADR）**：先啟動 `web-research` 查證 $\to$ 依 `05-Templates/Decision_Template.md` 產出 ADR $\to$ 術語參照 `00-AgentOS/GLOSSARY.md`。
 * **收尾指令（`/handoff`）**：依 `00-AgentOS/skills/handoff/SKILL.md` 完成升遷、50/60 行校驗與跨機同步檢查。
 
 ---
 
-## 📁 5. Code-Vault 解耦與專案生命週期
+## 📁 5. 單倉自包含與專案生命週期
 
 詳見 [workflows/PROJECT_LIFECYCLE.md](./workflows/PROJECT_LIFECYCLE.md)：
 
 | 位置 | 定位 | 內容規範 |
 | :--- | :--- | :--- |
-| **`<Vault>/01-Projects/_active/<專案>/`** | **治理四件套 SSOT** | 僅放純 Markdown：`AGENTS.md` ($\le 50$L)、`CONTEXT.md` ($\le 60$L，含 `repo_path`)、`SPEC.md`、`TICKETS.md` |
-| **`<WORKSPACE_ROOT>/repos/<專案>/`** | **獨立程式碼倉儲** | 原始碼、測試、資料集、建置產物與獨立 `.git` |
-| **`<WORKSPACE_ROOT>/workspaces/<專案>.code-workspace`** | **多根開發入口** | 同時掛載 Code Repo 與 Vault，供 Antigravity / VS Code / Cursor 一鍵開啟 |
+| **`<WORKSPACE_ROOT>/repos/<專案>/`** | **自包含專案倉儲（預設）** | 同置原始碼、測試、`.github/workflows/ci.yml` 與治理四件套（公開倉須將 `CONTEXT.md` / `TICKETS.md` 加入 `.gitignore`） |
+| **`Obsidian-SecondBrain-Template/`（`02-Areas/`、`00-AgentOS/`）** | **長青知識與全域 AgentOS** | 跨專案長青筆記、全域技能與 Hooks 唯一來源（經 `~/.gemini/config/` 全域掛載至所有專案）及舊版專案紀錄 |
 | **`04-Archive/projects/<專案>/`** | **統一結案封存區** | 結案時產出 `SUMMARY.md` 並標記 `status: archived`，釋放活躍區注意力 |

@@ -1,14 +1,14 @@
 # Project Lifecycle & Token Management Protocol (v3.0)
 
-本文件說明專案在 SecondBrain（Code-Vault 解耦架構）中的生命週期流轉與 Token 控管法則。
+本文件說明專案在 SecondBrain（單倉自包含 + 全域 AgentOS 掛載架構）中的生命週期流轉與 Token 控管法則。
 
 ---
 
 ## 📁 專案生命週期兩態流轉（單一封存真源）
 
-1. **活躍區：`01-Projects/_active/<ProjectName>/`**
-   - 僅存放純 Markdown 治理四件套：`AGENTS.md`（$\le 50$ 行）、`CONTEXT.md`（$\le 60$ 行，含 `repo_path`）、`SPEC.md`、`TICKETS.md`。
-   - 程式碼本體獨立於 `<WORKSPACE_ROOT>/repos/<ProjectName>/`，開發時開啟 `<WORKSPACE_ROOT>/workspaces/<ProjectName>.code-workspace`。
+1. **活躍開發區（預設）：`<WORKSPACE_ROOT>/repos/<ProjectName>/`**
+   - 程式碼、測試、`.github/workflows/ci.yml` 與治理四件套（`AGENTS.md` $\le 50$ 行、`CONTEXT.md` $\le 60$ 行、`SPEC.md`、`TICKETS.md`）直接同置於單一 Git 倉儲，無須建立 `.code-workspace`。
+   - 若專案預計設為 Public，請將 `CONTEXT.md`、`TICKETS.md` 加入 `.gitignore`；舊版存放於 `01-Projects/_active/<ProjectName>/` 的歷史專案仍維持相容。
 
 2. **統一封存區：`04-Archive/projects/<ProjectName>/`**
    - 已結案或不再維護的專案，統一移入 `04-Archive/projects/`（不再另設 `01-Projects/_archive/`，確保全庫單一 Archive 真源）。

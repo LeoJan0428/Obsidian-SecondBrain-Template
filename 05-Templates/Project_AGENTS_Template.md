@@ -5,7 +5,7 @@
 
 > [!IMPORTANT]
 > **四件套導航**：[全域憲法](../../../AGENTS.md) ｜ **領域法典 (本檔)** ｜ [工作暫存](./CONTEXT.md) ｜ [系統藍圖](./SPEC.md) ｜ [執行佇列](./TICKETS.md)  
-> **程式碼倉儲**：`<WORKSPACE_ROOT>/repos/{{title}}` ｜ **開發入口**：`<WORKSPACE_ROOT>/workspaces/{{title}}.code-workspace`  
+> **程式碼倉儲**：`<WORKSPACE_ROOT>/repos/{{title}}`（單倉自包含開發；不須 `.code-workspace`）  
 > **單向收緊鐵律**：僅能附加更嚴格之領域約束，嚴禁放寬全域憲法之測試、Git 衛生與 **本檔 $\le 50$ 行 / CONTEXT $\le 60$ 行** 硬上限。
 
 <!-- [AGENT-INIT-RULE]: 冷啟動時僅填寫已確定之技術棧物理邊界（2~3 條），嚴禁填寫 Clean Code/PEP8 等通用廢話。總長嚴格 <= 50 行。 -->
