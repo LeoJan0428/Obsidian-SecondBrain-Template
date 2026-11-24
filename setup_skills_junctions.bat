@@ -13,10 +13,12 @@ git config core.hooksPath 00-AgentOS/hooks
 set "HOOKS_DIR=%CD:\=/%/00-AgentOS/hooks"
 git config --global core.hooksPath "%HOOKS_DIR%"
 git config core.quotepath false
+git config --global core.quotepath false
 git config core.autocrlf input
+git config --global core.autocrlf input
 echo [AgentOS] Git local and global core.hooksPath set to "%HOOKS_DIR%".
-echo [AgentOS] Git core.quotepath set to false (UTF-8 Chinese paths enabled).
-echo [AgentOS] Git core.autocrlf set to input (LF preserved).
+echo [AgentOS] Git local and global core.quotepath set to false (UTF-8 Chinese paths enabled).
+echo [AgentOS] Git local and global core.autocrlf set to input (LF preserved).
 
 REM 2. Verify canonical skills directory
 if not exist "00-AgentOS\skills" (

@@ -21,12 +21,12 @@
 在檔案總管雙擊根目錄下的 **`setup_skills_junctions.bat`**，或在終端機執行：
 
 ```cmd
-cd <WORKSPACE_ROOT>\<YOUR_VAULT_REPO>
+cd "<WORKSPACE_ROOT>\<YOUR_VAULT_REPO>"
 .\setup_skills_junctions.bat
 ```
 
 這支腳本會自動完成 4 項全域綁定（換新電腦或重灌時只需執行這一次）：
-1. **全域與本地 Git Hooks（防金鑰外洩）**：設定 `core.hooksPath` 至 `00-AgentOS/hooks`（攔截 `.env`、`local.properties`、`*.pem`/`*.key`、API Key / 私鑰樣式與超過 500KB 檔案），並啟用 UTF-8 中文路徑與 LF 換行規範。
+1. **全域與本地 Git Hooks（防金鑰外洩）**：設定 `core.hooksPath` 至 `00-AgentOS/hooks`（攔截 `.env`、`local.properties`、`*.pem`/`*.key`、`id_*`、`credentials.json`、API Key / 私鑰 / DB 帳密樣式與超過 500KB 檔案），並啟用 UTF-8 中文路徑與 LF 換行規範；若獨立 Repo 本身有 `.git/hooks/` 腳本會自動串接執行（亦可在該 Repo 以 `git config --local core.hooksPath .git/hooks` 單倉覆寫）。
 2. **本機工作區技能傳送門**：以 NTFS Junction 將 `00-AgentOS/skills/` 映射至 `.agents\skills`、`.claude\skills` 與 `.cursor\skills`。
 3. **Antigravity 機器全域技能**：建立 `%USERPROFILE%\.gemini\config\skills` $\to$ `00-AgentOS\skills`。
 4. **Antigravity 機器全域憲法**：同步 `%USERPROFILE%\.gemini\config\AGENTS.md` $\to$ 根目錄 `AGENTS.md`。
@@ -44,7 +44,7 @@ Test-Path "$env:USERPROFILE\.gemini\config\AGENTS.md"
 ## 步驟 3：Obsidian 端設定
 
 1. **開啟正確 Vault 根目錄**：
-   * 在 Obsidian 選擇 **Open folder as vault**，務必選取 `<WORKSPACE_ROOT>\<YOUR_VAULT_REPO>\`，**切勿**選取更外層目錄。
+   * 在 Obsidian 選擇 **Open folder as vault**，務必選取 `<WORKSPACE_ROOT>\Obsidian-SecondBrain-Template\`，**切勿**選取外層 `project\` 目錄。
 2. **附件與檔案排除規則**（已預先版控於 `.obsidian/app.json`）：
    * `attachmentFolderPath`：`03-Resources/attachments`（避免貼圖散落根目錄）。
    * `userIgnoreFilters`：已排除 `**/data/**`、`**/reports/**`、`**/.venv/**`、`**/node_modules/**` 等快取雜訊。
@@ -60,7 +60,7 @@ Test-Path "$env:USERPROFILE\.gemini\config\AGENTS.md"
 採 **單倉自包含模式**，日常寫程式不再需要 `.code-workspace`：
 
 1. **建立並開啟專案**：
-   * 在 `<WORKSPACE_ROOT>\repos\<專案>\` 初始化獨立 Git 倉儲（IDE、桌面 App 或 `agy` CLI 直接開啟此資料夾即可自動載入全域規則與 14 大技能）。
+   * 在 `<WORKSPACE_ROOT>\repos\\<專案>\` 初始化獨立 Git 倉儲（IDE、桌面 App 或 `agy` CLI 直接開啟此資料夾即可自動載入全域規則與 14 大技能）。
    * 將該專案的 `AGENTS.md`（$\le 50$ 行）、`CONTEXT.md`（$\le 60$ 行）、`SPEC.md`、`TICKETS.md` 直接放在專案根目錄。
    * 若該倉儲預計設為 **Public**，請將 `CONTEXT.md`、`TICKETS.md` 等私人工作檔列入該專案的 `.gitignore`。
 2. **啟用自動分支與 GitHub PR/CI 閉環（建議）**：

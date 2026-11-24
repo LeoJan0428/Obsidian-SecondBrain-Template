@@ -16,7 +16,7 @@ description: 靈感收集箱自動消化、外部文章提煉與長青知識升�
    - 一篇長文提煉出 1~3 個獨立的原子核心概念，而非整篇無腦複製。
    - 每篇原子筆記專注解決一個問題或記錄一個架構模式。
 2. **長青升遷導航 (Evergreen Routing)**：
-   - 涉及領域長期知識（如系統架構模式、領域演算法、資料分析、軟體工程實踐）$\to$ 提煉寫入 `02-Areas/[對應領域]/`。
+   - 涉及領域長期知識（如台股多因子、XAI 歸因、影像處理數學、機器人運動學）$\to$ 提煉寫入 `02-Areas/[對應領域]/`。
    - 涉及外部參考手冊、論文摘要、工具 CheatSheet $\to$ 歸入 `03-Resources/`。
    - 涉及某活躍專案的具體靈感 $\to$ 整理後直接加入該專案的 `TICKETS.md` 或 `SPEC.md`。
 3. **雙向連結織網 (Backlink Weaving)**：
@@ -35,7 +35,7 @@ description: 靈感收集箱自動消化、外部文章提煉與長青知識升�
    - 濾除廢話、廣告與 SEO 冗贅詞。
 3. **原子筆記生成**：
    - 依照 `05-Templates/Knowledge_Template.md` 生成結構化筆記。
-   - 補齊 YAML Frontmatter (`type: concept`, `tags`, `updated`)。
+   - 補齊統一 YAML Frontmatter（`title`、`type: concept`、`category`、`domain`、`tags`、`last_updated`）。
 4. **歸檔與收尾**：
    - 移出已消化的原始檔案，更新相關 Index 筆記。
    - 輸出消化簡報，列出本次新增的長青知識卡片。

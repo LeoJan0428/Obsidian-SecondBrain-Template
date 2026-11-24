@@ -1,21 +1,27 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# 🛡️ SecondBrain Git Pre-Commit Security, Cleanliness & Data Shield Hook (v3.0)
+# 🛡️ SecondBrain Git Pre-Commit Security, Cleanliness & Data Shield Hook (v3.1)
 # ==============================================================================
 
 set -u
 
-# 1. 絕對機密、快取與環境狀態污物黑名單 (無條件攔截)
+# 1. 絕對機密、快取與環境狀態污物黑名單
 ABSOLUTE_FORBIDDEN=(
     "__pycache__"
-    "(^|/)\.env($|\.)"
-    "(^|/)key\.json$"
     "(^|/)local\.properties$"
-    "\.(pem|key)$"
+    "\.(pem|key|p12|pfx)$"
     "workspace\.json"
     "workspace-mobile\.json"
     "\.DS_Store"
     "(^|/)scratch/"
+    "(^|/)id_(rsa|ed25519|ecdsa|dsa)$"
+)
+
+# 1b. 金鑰 JSON 檔名黑名單 (允許 fixtures 與 *.example/sample/template)
+CREDENTIAL_JSON_PATTERNS=(
+    "(^|/)key\.json$"
+    "(^|/)credentials\.json$"
+    "(^|/)service[-_]?account.*\.json$"
 )
 
 # 2. 原始數據目錄與大型二進位模型黑名單 (非 fixtures 區禁止入庫)
@@ -31,12 +37,31 @@ DATA_PATTERNS=(
 MAX_FILE_BYTES=512000
 
 ERRORS=0
+REPO_TOPLEVEL="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+HOOK_VAULT_ROOT="$(cd "$(dirname "$0")/../.." && pwd -P 2>/dev/null || true)"
 
 # 使用 -z 與 --diff-filter=ACMR：安全處理含空白/中文路徑，且允許刪除舊違規檔案
 while IFS= read -r -d '' file; do
     [ -z "$file" ] && continue
 
-    # 檢查 1: 絕對污物與機密攔截
+    IS_FIXTURE=0
+    if printf '%s\n' "$file" | grep -E "(^|/)(tests/fixtures|fixtures)/" > /dev/null 2>&1; then
+        IS_FIXTURE=1
+    fi
+
+    IS_EXAMPLE=0
+    if printf '%s\n' "$file" | grep -E "\.(example|sample|template)$" > /dev/null 2>&1; then
+        IS_EXAMPLE=1
+    fi
+
+    # 檢查 1: 絕對污物與機密攔截 (.env.example 等範本檔放行)
+    if [ "$IS_EXAMPLE" -eq 0 ] && printf '%s\n' "$file" | grep -E "(^|/)\.env($|\.)" > /dev/null 2>&1; then
+        echo "🛑 [GIT PRE-COMMIT ERROR] Staged .env file violates repository security policy:"
+        echo "   File   : $file"
+        echo "   Action : Unstage via: git reset HEAD -- \"$file\""
+        ERRORS=$((ERRORS + 1))
+    fi
+
     for pattern in "${ABSOLUTE_FORBIDDEN[@]}"; do
         if printf '%s\n' "$file" | grep -E "$pattern" > /dev/null 2>&1; then
             echo "🛑 [GIT PRE-COMMIT ERROR] Staged file violates repository security policy:"
@@ -48,12 +73,20 @@ while IFS= read -r -d '' file; do
         fi
     done
 
-    # 檢查 2: 大型數據與模型檔案攔截 (允許 tests/fixtures/ 與 fixtures/ 白名單)
-    IS_FIXTURE=0
-    if printf '%s\n' "$file" | grep -E "(^|/)(tests/fixtures|fixtures)/" > /dev/null 2>&1; then
-        IS_FIXTURE=1
+    if [ "$IS_FIXTURE" -eq 0 ] && [ "$IS_EXAMPLE" -eq 0 ]; then
+        for pattern in "${CREDENTIAL_JSON_PATTERNS[@]}"; do
+            if printf '%s\n' "$file" | grep -E "$pattern" > /dev/null 2>&1; then
+                echo "🛑 [GIT PRE-COMMIT ERROR] Credential JSON file outside fixtures/templates is prohibited:"
+                echo "   File   : $file"
+                echo "   Pattern: $pattern"
+                echo "   Action : Unstage via: git reset HEAD -- \"$file\""
+                ERRORS=$((ERRORS + 1))
+                break
+            fi
+        done
     fi
 
+    # 檢查 2: 大型數據與模型檔案攔截 (允許 tests/fixtures/ 與 fixtures/ 白名單)
     if [ "$IS_FIXTURE" -eq 0 ]; then
         for pattern in "${DATA_PATTERNS[@]}"; do
             if printf '%s\n' "$file" | grep -E "$pattern" > /dev/null 2>&1; then
@@ -79,10 +112,16 @@ while IFS= read -r -d '' file; do
         ERRORS=$((ERRORS + 1))
     fi
 
-    # 檢查 4: 暫存差異密鑰與私鑰樣式掃描 (略過 Hook 腳本自身與 *.example 範本)
-    if ! printf '%s\n' "$file" | grep -E "^00-AgentOS/hooks/|\.example$" > /dev/null 2>&1; then
-        SECRET_REGEX='^\+.*(AIza[0-9A-Za-z_-]{30,}|sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{22,}|-----BEGIN (RSA |OPENSSH |EC |DSA )?PRIVATE KEY-----)'
-        if git diff --cached -U0 -- "$file" 2>/dev/null | grep -v '^+++' | grep -E "$SECRET_REGEX" > /dev/null 2>&1; then
+    # 檢查 4: 暫存差異密鑰與私鑰樣式掃描 (僅在本 Vault 略過 hook 自身，並略過 *.example/sample/template)
+    IS_OWN_HOOK=0
+    if { [ "$file" = "00-AgentOS/hooks/pre-commit" ] || [ "$file" = "00-AgentOS/hooks/commit-msg" ]; } && \
+       [ -n "$REPO_TOPLEVEL" ] && [ -n "$HOOK_VAULT_ROOT" ] && [ "$REPO_TOPLEVEL" -ef "$HOOK_VAULT_ROOT" ]; then
+        IS_OWN_HOOK=1
+    fi
+
+    if [ "$IS_EXAMPLE" -eq 0 ] && [ "$IS_OWN_HOOK" -eq 0 ]; then
+        SECRET_REGEX='((^|[^A-Za-z0-9_-])(AIza[0-9A-Za-z_-]{30,}|sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{22,}|AKIA[0-9A-Z]{16}|xox[baprs]-[0-9A-Za-z-]{10,}|hf_[A-Za-z0-9]{20,}|glpat-[A-Za-z0-9_-]{20,})|(postgres|postgresql|mysql|mongodb(\+srv)?|redis)://[^/[:space:]:@]+:[^/[:space:]@]+@|-----BEGIN (ENCRYPTED |RSA |OPENSSH |EC |DSA |PGP )?PRIVATE KEY-----)'
+        if git diff --cached -U0 -- "$file" 2>/dev/null | awk '/^@@/{h=1; next} h && /^\+/{sub(/^\+/, ""); print}' | grep -E "$SECRET_REGEX" > /dev/null 2>&1; then
             echo "🛑 [GIT PRE-COMMIT ERROR] Potential secret/API key detected in staged diff:"
             echo "   File   : $file"
             echo "   Action : Remove hardcoded secret, use environment variables or .gitignore,"
@@ -96,6 +135,13 @@ if [ "$ERRORS" -gt 0 ]; then
     echo "❌ Commit rejected! Found $ERRORS prohibited file(s) or policy violation(s)."
     echo "   Please sanitize before committing."
     exit 1
+fi
+
+# 檢查 5: 串接倉儲本地 pre-commit hook (改用 --git-dir 以免被全域 core.hooksPath 遮蔽)
+GIT_DIR_PATH="$(git rev-parse --git-dir 2>/dev/null || true)"
+LOCAL_HOOK="$GIT_DIR_PATH/hooks/pre-commit"
+if [ -n "$GIT_DIR_PATH" ] && [ -x "$LOCAL_HOOK" ] && [ ! "$LOCAL_HOOK" -ef "$0" ]; then
+    "$LOCAL_HOOK" || exit $?
 fi
 
 exit 0

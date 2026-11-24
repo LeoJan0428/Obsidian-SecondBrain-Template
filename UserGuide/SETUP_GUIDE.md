@@ -1,127 +1,56 @@
-# 🛠️ SecondBrain 開箱安裝與環境設定手冊 (SETUP_GUIDE.md)
+# 🛠️ Obsidian 筆記庫開箱與外掛設定手冊 (SETUP_GUIDE.md)
 
 > [!IMPORTANT]
-> **新電腦或新工作區開箱必讀**  
-> 本文件列出在使用本知識庫進行開發、寫筆記與多代理 AI 協同工作前，**所有必須安裝的軟體、Windows 傳送門配置、Obsidian 關鍵設定與外掛推薦清單**。照著打勾執行即可完成 100% 開箱準備。
+> **環境配置與 Windows 傳送門安裝步驟已統一收斂至根目錄 [SETUP.md](../SETUP.md)**。  
+> 本文件專注於 **Obsidian 桌面端 GUI 設定、推薦外掛配置與常見疑難排解**。
 
 ---
 
-## 📋 快速開箱檢查清單 (Quick Checklist)
+## 📋 開箱檢查清單 (Quick Checklist)
 
-- [ ] **1. 核心軟體安裝**：Obsidian、Git、Python 3.10+、AI 編輯器（Antigravity / Cursor / Claude Code / Aider）。
-- [ ] **2. 執行環境與傳送門一鍵配置**：雙擊根目錄下的 `setup_skills_junctions.bat`（1 秒完成）。
-- [ ] **3. 正確開啟 Obsidian**：確認開啟的目錄是本知識庫根目錄（`<WORKSPACE_ROOT>\Obsidian-SecondBrain-Template`）。
-- [ ] **4. 配置視力遮罩 (Excluded Files)**：在 Obsidian 中屏蔽快取與二進位檔案。
-- [ ] **5. 安裝 Obsidian 社群外掛**：安裝 Dataview（必裝）、Smart Connections（可選）。
-- [ ] **6. 驗證 Git 雙守門機制**：確認 `pre-commit` 與 `commit-msg` 正常運作。
+- [ ] **1. 安裝核心軟體**：Obsidian (v1.5+)、Git、Python 3.10+、GitHub CLI (`gh`) 與 AI 編輯器（Antigravity / Cursor / Claude Code / Aider）。
+- [ ] **2. 執行一鍵全域綁定**：依 [SETUP.md](../SETUP.md) 執行 `setup_skills_junctions.bat`，完成全域 Git Hooks、14 大技能 Junction 與憲法 HardLink。
+- [ ] **3. 正確開啟 Vault**：在 Obsidian 選取 `<WORKSPACE_ROOT>\Obsidian-SecondBrain-Template\`（**切勿**選取外層 `project\` 目錄）。
+- [ ] **4. 確認視力遮罩與外掛**：確認 `.obsidian/app.json` 排除規則已生效並啟用 Dataview。
 
 ---
 
-## 💻 第一步：核心軟體與執行環境安裝
+## ⚙️ Obsidian 核心設定
 
-### 1. 筆記與開發核心工具
-1. **Obsidian (筆記大腦)**：
-   * 下載官網：[https://obsidian.md/](https://obsidian.md/)
-   * 建議版本：v1.5.0 以上（支援最新 Properties 屬性檢視）。
-2. **Git (版本控制)**：
-   * 下載官網：[https://git-scm.com/](https://git-scm.com/)
-   * 確認終端可用：`git --version`
-3. **Python (量化與自動化執行環境)**：
-   * 建議版本：**Python 3.10 ~ 3.11**（與科學計算庫相容性最佳）。
-   * 確認終端可用：`python --version` 或 `py --version`。
-
-### 2. 多代理 AI 編輯器（可任意切換或搭配使用）
-* **Google Antigravity (原生推薦)**：原生讀取 `AGENTS.md` 與 `.agents/skills/`，無須額外指針檔。
-* **Cursor**：原生讀取根目錄 `AGENTS.md` 與 `.cursor/skills/`。
-* **Claude Code**：讀取根目錄 `CLAUDE.md`（內含 `@AGENTS.md`）與 `.claude/skills/`。
-* **Aider**：讀取根目錄 `.aider.conf.yml`（自動加載 `AGENTS.md`）。
-
----
-
-## ⚡ 第二步：Windows 環境與技能傳送門一鍵建立
-
-本知識庫將工程技能實體唯一保存在 [00-AgentOS/skills/](../00-AgentOS/skills/)，讓你在 Obsidian 中能隨時打開檢視與修改。
-
-### 操作步驟（只需 1 秒）：
-1. 在檔案總管中，進到本知識庫根目錄。
-2. **對著 [`setup_skills_junctions.bat`](../setup_skills_junctions.bat) 滑鼠點兩下執行**！
-3. 批次檔會全自動完成兩大核心工程設定：
-   * **Git 核心配置升級**：
-     * `git config core.hooksPath 00-AgentOS/hooks`（將 Git Hooks 綁定至版本控管目錄）
-     * `git config core.quotepath false`（解決 Windows 中文路徑轉義導致 Hook 失效的問題）
-     * `git config core.autocrlf input`（防止 Windows CRLF 破壞 Shell 腳本執行）
-   * **NTFS Junction 目錄傳送門**：
-     * `.agents\skills` $\longleftrightarrow$ `00-AgentOS\skills`
-     * `.claude\skills` $\longleftrightarrow$ `00-AgentOS\skills`
-     * `.cursor\skills` $\longleftrightarrow$ `00-AgentOS\skills`
-
----
-
-## ⚙️ 第三步：Obsidian 筆記庫核心關鍵設定
-
-打開 Obsidian，點擊 **「開啟現有資料夾作為筆記庫 (Open folder as vault)」**：
-> ⚠️ **重要防呆**：請務必選取 `<WORKSPACE_ROOT>\Obsidian-SecondBrain-Template`（本知識庫根目錄）資料夾，**千萬不要選到更外層的工作區目錄**！
-
-### 1. 關鍵設定：物理視力遮罩 (Excluded Files)
-確保 Obsidian 打開飛快、不被快取與二進位檔卡死：
-1. 打開 Obsidian $\rightarrow$ 左下角 **設定 (Settings)** $\rightarrow$ **檔案與連結 (Files and links)**。
-2. 找到 **已排除的檔案 (Excluded files)**，確認包含以下規則（本庫已在 `.obsidian/app.json` 預設配好）：
-   ```text
-   **/.gradle/**
-   **/.idea/**
-   **/.kotlin/**
-   **/__pycache__/**
-   **/.pytest_cache/**
-   **/.venv/**
-   **/node_modules/**
-   **/*.pcd
-   **/*.rdk
-   **/build/**
-   **/reports/**
-   ```
+### 1. 視力遮罩 (Excluded Files)
+本庫已於 [.obsidian/app.json](../.obsidian/app.json) 預先版控以下排除規則，避免快取與大檔拖慢索引：
+* `**/.gradle/**`、`**/.idea/**`、`**/.kotlin/**`、`**/__pycache__/**`、`**/.pytest_cache/**`、`**/.venv/**`、`**/node_modules/**`
+* `**/*.pcd`、`**/*.rdk`、`**/build/**`、`**/reports/**`、`**/data/**`、`*.parquet`、`*.pkl`、`*.npy`
 
 ### 2. 內部連結與附件設定
-* **設定 $\rightarrow$ 檔案與連結**：
-  * **內部連結類型**：建議選擇 `最簡路徑 (Shortest path when possible)`。
-  * **自動更新內部連結**：務必 **開啟 (ON)**，移動筆記時所有 `[[Link]]` 自動更新。
+在 Obsidian **設定 (Settings) $\rightarrow$ 檔案與連結 (Files and links)** 確認：
+* **新附件預設存放路徑**：`03-Resources/attachments`（已在 `app.json` 預設）
+* **內部連結類型**：建議 `最簡路徑 (Shortest path when possible)`
+* **自動更新內部連結**：務必 **開啟 (ON)**
 
 ---
 
-## 🧩 第四步：推薦 Obsidian 社群外掛 (Community Plugins)
+## 🧩 推薦 Obsidian 社群外掛 (Community Plugins)
 
-打開 Obsidian 設定 $\rightarrow$ **社群外掛 (Community plugins)** $\rightarrow$ 關閉安全模式 $\rightarrow$ 點擊 **瀏覽 (Browse)** 安裝：
-
-| 外掛名稱 (Plugin) | 推薦理由 | 安裝後的建議配置 |
-| :--- | :--- | :--- |
-| **Dataview** *(必裝)* | 讓筆記庫具備資料庫查詢能力。自動生成專案進度清單與 MOC。 | 安裝後開啟 `Enable JavaScript Queries`。 |
-| **Smart Connections** *(可選)* | 本地向量語意搜尋。在側邊欄即時呈現與當前筆記最相關的知識卡片。 | 需填入 API Key 或連線本地 Ollama；設定中排除 `01-Projects`。不裝亦不影響全庫 AI 功能。 |
-| **Templater** *(推薦)* | 強化範本渲染引擎。在新建筆記時自動填入日期、標題與關聯檔案。 | 將範本資料夾設為 `05-Templates/`。 |
-| **Paste URL into Selection** | 複製網址後反白文字按下 `Ctrl+V`，自動轉為 Markdown 超連結格式。 | 預設即可。 |
-
----
-
-## 🛡️ 第五步：驗證 Git 本地雙守門機制 (Hooks)
-
-本庫透過 `00-AgentOS/hooks/` 提供兩層自動防護：
-
-1. **`pre-commit`（安全守門）**：
-   * 提交前自動攔截 `.env`、`__pycache__`、`workspace.json` 或 `scratch/`。
-2. **`commit-msg`（格式與去水印守門）**：
-   * 自動剝除 `Co-authored-by:` 等多餘標籤。
-   * 強制檢驗第一行是否符合 Conventional Commits 格式（如 `feat(scope): subject`）。
+| 外掛名稱 (Plugin) | 用途與配置建議 |
+| :--- | :--- |
+| **Dataview** *(建議安裝)* | 驅動 [DASHBOARD.md](../DASHBOARD.md) 動態表格；安裝後務必於設定開啟 **Enable JavaScript Queries**。 |
+| **Canvas** *(內建核心外掛)* | 預設啟用，可直接開啟 [PROJECTS_WAR_ROOM.canvas](../PROJECTS_WAR_ROOM.canvas)。 |
+| **Obsidian Web Clipper** *(瀏覽器擴充)* | 目標資料夾設為 `_inbox`，範本貼入 [WebClipper_Template.md](../05-Templates/WebClipper_Template.md)。 |
+| **Templater** *(選配)* | 若使用模板插入筆記，將範本資料夾設為 `05-Templates/`。 |
+| **Smart Connections** *(選配)* | 本地語意搜尋側邊欄；建議在設定中排除 `04-Archive`。 |
 
 ---
 
 ## 🩺 疑難排解 (Troubleshooting)
 
-### Q1：換了新電腦或重拉 Git 專案，AI 說找不到技能怎麼辦？
-* **解法**：直接對著專案根目錄下的 [`setup_skills_junctions.bat`](../setup_skills_junctions.bat) 點兩下，傳送門與 Git 設置 1 秒自動搭好。
+### Q1：換新電腦或獨立 Repo 讀不到全域技能或規範？
+* **解法**：於本知識庫根目錄重新執行 [`setup_skills_junctions.bat`](../setup_skills_junctions.bat)，並依 [SETUP.md](../SETUP.md) 的 PowerShell 驗證指令確認 `core.hooksPath`、`~/.gemini/config/AGENTS.md` 與 14 個技能目錄皆生效。
 
-### Q2：為什麼在終端 commit 時顯示拒絕？
-* **解法**：檢查報錯訊息：
-  * 若為 `pre-commit` 報錯：代表你 stage 了 `.env`、`__pycache__` 或 `workspace.json`，請執行 `git reset HEAD <檔案>` 將其解除暫存。
-  * 若為 `commit-msg` 報錯：代表 Commit 訊息不符合 `<type>(<scope>): <subject>` 格式（例如需寫成 `feat(agent): 新增功能`）。
+### Q2：終端 `git commit` 遭到拒絕？
+* **解法**：依 [00-AgentOS/hooks/](../00-AgentOS/hooks/) 提示處理：
+  * `pre-commit` 攔截：代表暫存區含機密檔、金鑰樣式、`__pycache__` 或 $>500\text{KB}$ 檔案，執行 `git reset HEAD -- "<檔案>"` 移出暫存後修正。
+  * `commit-msg` 攔截：確認第一行符合 `<type>(<scope>): <subject>` 格式（允許 `feat|fix|docs|refactor|chore|test|ci|build|perf|style|revert`）。
 
-### Q3：我想為知識庫修改規範或新增專屬 Skill 該怎麼做？
-* **解法**：請參閱 [USER_GUIDE.md § 系統自訂與擴充指南](./USER_GUIDE.md)。直接在 `00-AgentOS/skills/` 建立資料夾與 `SKILL.md`，Windows Junction 會自動同步至所有 AI 編輯器！
-
+### Q3：如何新增或修改 Skill？
+* **解法**：直接編輯 `00-AgentOS/skills/<skill-name>/SKILL.md`，Windows Junction 會零延遲同步至 `.agents`、`.claude`、`.cursor` 與 `~/.gemini/config/skills`；異動技能時務必同步更新根目錄 [README.md](../README.md) 技能清冊。

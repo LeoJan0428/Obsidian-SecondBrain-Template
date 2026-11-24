@@ -1,11 +1,11 @@
 ---
-project: "[Project Name]"
+project: "{{title}}"
 created_at: "{{date}}"
 status: active
 type: spec
 ---
 
-# 📋 Technical Specification: {{Project Name}}
+# 📋 Technical Specification: {{title}}
 
 ## 1. 專案概述 (Overview)
 - 

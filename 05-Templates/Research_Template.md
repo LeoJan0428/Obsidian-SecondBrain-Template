@@ -1,12 +1,12 @@
 ---
-paper_title: "[Paper/Research Title]"
+paper_title: "{{title}}"
 authors: []
 year: 2026
 tags: [research, paper]
 created_at: "{{date}}"
 ---
 
-# 🔬 Research Note: {{Paper Title}}
+# 🔬 Research Note: {{title}}
 
 ## 1. 研究問題 (Problem Statement)
 - 

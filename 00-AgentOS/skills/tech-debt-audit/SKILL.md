@@ -10,23 +10,22 @@ description: 專案技術債全面體檢、架構腐化審查與例外黑洞排�
 
 ## 核心原則 (Core Principles)
 1. **上帝物件預警 (God Object Detection)**：
-   - 掃描所有模組行數，單檔超過 600 行者（如 `adaptive_tuner.py`、`daily_updater.py`、`telegram_bot_service.py`）列入高圈複雜度監控名單，建議依職責拆解為正交子模組。
+   - 掃描原始碼模組行數，單檔超過 600 行者列入高複雜度監控名單，建議依單一職責拆解為正交子模組。
 2. **例外吞噬阻斷 (Exception Swallowing Elimination)**：
-   - 嚴格排查 `except Exception: pass`（`BLE001` / `S110`），杜絕潛在 `NameError` 或 `TypeError` 被靜音吞噬。
-3. **架構分層防禦 (Layer Isolation via pytest-archon)**：
-   - 驗證 Domain 核心層（如 `src.domain.*`）嚴禁反向依賴外層 Presentation、Web Controllers 或 Notifications。
-4. **現代化語法與型別規範 (Modern Python Typing)**：
-   - 掃描過時之 `typing.Dict` / `typing.List`，引導遷移至 Python 3.10 原生 `dict` / `list` / `| None`。
+   - 嚴格排查盲目吞噬例外（如 Python `except Exception: pass` / `S110`、JS/TS 空 `catch {}`），杜絕潛在錯誤被靜音掩蓋。
+3. **架構分層防禦 (Layer Isolation)**：
+   - 驗證核心領域層（Domain / Core）嚴禁反向依賴外層 Presentation、Controllers 或外部 I/O。
+4. **現代化型別與語法規範 (Strict Typing Hygiene)**：
+   - 檢查弱型別逃逸或過時寫法（如 Python 舊式 `typing.Dict`/`List`、TypeScript `any`）。
 5. **優先級評分卡輸出 (Actionable Health Scorecard)**：
-   - 不只列出問題，必須依危害程度（P0 致命未定義、P1 例外黑洞、P2 上帝物件、P3 語法雜訊）提供前三大改善建議。
+   - 依危害程度（P0 致命缺陷、P1 例外黑洞、P2 上帝物件、P3 型別/風格雜訊）提供前三大改善建議。
 
 ## 執行流程
 1. **靜態工具快篩**：
-   - 執行 `ruff check src/ --statistics` 與 `ruff check src/ --select F821` 快速盤點錯誤分佈。
+   - 依專案技術棧執行對應檢查（例：Python 用 `ruff check src/ --statistics`；TS/JS 用 `npx tsc --noEmit` / `eslint`；或專案 `AGENTS.md` 指定閘門）。
 2. **架構邊界測試**：
-   - 執行 `pytest tests/test_architecture_boundaries.py -q` 驗證分層隔離。
+   - 執行專案既有架構邊界測試或完整測試套件（如 `pytest` / `npm test`）。
 3. **複雜度與代碼長度分析**：
-   - 統計 Top 10 最大檔案行數與類別方法分佈。
+   - 統計 Top 10 最大檔案行數與高複雜度函式分佈。
 4. **輸出技術債綜合評估報告**：
    - 明確標註健康指標與具體重構建議路徑。
-

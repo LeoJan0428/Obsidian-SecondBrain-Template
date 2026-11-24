@@ -14,6 +14,8 @@
 | **L2【常規功能 / 除錯】** | • 新增單一模組功能<br/>• 明確 Bug 修復<br/>• 單一 Ticket 推進 | 讀 `AGENTS.md` + `TICKETS.md` $\to$ `tdd` $\to$ `implement` $\to$ `commit` $\to$ `/handoff` | • 輸出 `[GATE]` 與 `[RETRIEVAL_PROOF]`<br/>• 同步 `CONTEXT.md` |
 | **L3【新專案 / 跨模組重構】** | • 全新專案啟動<br/>• 跨模組架構重組<br/>• 核心演算法 / 技術選型 | **觸發顆粒度熔斷** $\to$ 確認拆解後走滿標準 **8 階工作流** | • 產出/更新四件套<br/>• 雙軸度 `code-review` |
 
+> **Explore 期豁免（對齊 [PROFILE.md](./PROFILE.md) `GLOBAL-01`）**：實驗性原型在未觸發「改 A 壞 B、真金白銀／嚴格狀態機、長期維護或多人協作」訊號前，採極簡驗證即可，免預先補齊四件套或強制 TDD。
+
 ---
 
 ## 🛠️ 2. L3 標準 8 階工程工作流 (Standard 8-Stage Workflow)
@@ -34,10 +36,11 @@ flowchart TD
 1. **`/grill-with-docs`**：結合 `02-Areas/` 既有筆記進行挑戰式提問，釐清架構邊界與隱含假設。
 2. **`/to-spec`**：產出 `./SPEC.md`，並同步從 `05-Templates/Project_AGENTS_Template.md` 冷啟動專案根目錄 `./AGENTS.md` 初版。
 3. **`/to-tickets`**：將 `SPEC.md` 拆解為獨立、具 Given/When/Then 驗收條件的 `TICKETS.md`。
-4. **`/tdd` $\to$ `/implement`**：嚴格先紅燈後綠燈，鎖定單一 Ticket 範圍，嚴禁順手改動無關檔案。
-5. **`/code-review`**：從標準面、規格面、架構依賴與資源生命週期雙軸審查。
-6. **`commit`**：於專案倉儲（`<WORKSPACE_ROOT>/repos/<專案>/`）獨立原子提交（僅舊版解耦專案需雙邊提交）；禁 `git add .`，交由全域 `00-AgentOS/hooks/` 自動守門。
-7. **`/handoff`**：執行知識升遷（`CONTEXT.md` $\to$ `AGENTS.md` / `SPEC.md` / `02-Areas/`）、修剪滾動視窗並壓縮上下文。
+4. **`/tdd`**：嚴格紅燈先行，依 Ticket 驗收條件撰寫會失敗的契約／單元測試。
+5. **`/implement`**：鎖定單一 Ticket 綠燈實作並安全重構，嚴禁順手改動無關檔案。
+6. **`/code-review`**：從標準面、規格面、架構依賴與資源生命週期雙軸審查。
+7. **`commit` & PR/CI**：於專案倉儲（`<WORKSPACE_ROOT>/repos/<專案>/`）獨立原子提交；禁 `git add .`，交由全域 `00-AgentOS/hooks/` 守門，有 Remote 與 CI 則開分支推送建 PR。
+8. **`/handoff`**：執行知識升遷（`CONTEXT.md` $\to$ `AGENTS.md` / `SPEC.md` / `02-Areas/`）、修剪滾動視窗並壓縮上下文。
 
 > 💡 **外檢前置硬阻斷**：進入架構設計或技術選型前，凡涉及業界實務、第三方庫或報錯，必須先調用 `web-research` 技能（遵循 `[AGENTS.md]` §3 硬阻斷）。  
 > 完整技能實體置於 `00-AgentOS/skills/`，透過 Windows Junction 映射至 `.agents/skills`、`.claude/skills`、`.cursor/skills`。

@@ -1,12 +1,18 @@
 # 🧭 SecondBrain 決策作戰總覽儀表板 (Mission Control Dashboard)
 
 > [!NOTE]
-> 本儀表板由 **Dataview** 社群外掛驅動，自動動態彙整 `01-Projects/_active/` 與 `_inbox/` 狀態。
+> 本儀表板由 **Dataview** 社群外掛驅動，自動動態彙整舊版 `01-Projects/_active/` 與 `_inbox/` 狀態；v3.0 單倉自包含專案統一登錄於 [[01-Projects/PROJECTS_REGISTRY|自包含專案總冊 (v3.0 Registry)]]。
 > 若畫面顯示原始碼區塊而非表格，請先確認已安裝並啟用 **Dataview** 外掛，並在設定中開啟 **Enable JavaScript Queries**。
 
 ---
 
-## 📌 活躍專案作戰矩陣 (Active Projects Matrix)
+## 📋 v3.0 單倉自包含專案總冊 (Self-Contained Registry)
+
+- 🗂️ **專案索引總表**：[[01-Projects/PROJECTS_REGISTRY|開啟自包含專案總冊 (PROJECTS_REGISTRY.md)]]（`repos/<專案>/` 新專案僅於該表登錄一行，SSOT 留於各 Repo 根目錄 `CONTEXT.md`）
+
+---
+
+## 📌 活躍專案作戰矩陣 (Legacy Active Projects Matrix)
 
 ```dataview
 TABLE 
@@ -27,7 +33,7 @@ SORT last_updated DESC
 TABLE
   file.cday as "收集日期",
   tags as "標籤",
-  source_url as "來源"
+  source as "來源"
 FROM "_inbox"
 WHERE file.name != "README"
 SORT file.cday DESC

@@ -3,7 +3,7 @@
 		{
 			"id": "hub-core",
 			"type": "text",
-			"text": "# 🧭 SecondBrain 專案作戰白板\n\n> [!NOTE]\n> **使用方式**\n> 1. 於 `01-Projects/_active/<Project>/` 建立新專案四件套\n> 2. 將該專案的 `CONTEXT.md` 拖入本白板卡片群組\n> 3. 結案封存時移入 `04-Archive/projects/` 並從白板移除",
+			"text": "# 🧭 SecondBrain 專案作戰白板\n\n> [!NOTE]\n> **使用方式 (v3.0)**\n> 1. 新專案採用 `<WORKSPACE_ROOT>/repos/<Project>/` 單倉自包含，於 [[01-Projects/PROJECTS_REGISTRY|PROJECTS_REGISTRY.md]] 登錄索引\n> 2. 需要空間總覽時，可在本白板新增文字卡片或連結至 [[DASHBOARD.md]]\n> 3. 結案封存時移入 `04-Archive/projects/` 並從白板移除",
 			"x": -180,
 			"y": -100,
 			"width": 360,

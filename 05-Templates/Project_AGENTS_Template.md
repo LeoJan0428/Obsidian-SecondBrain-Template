@@ -1,10 +1,10 @@
-@../../../AGENTS.md
 @./CONTEXT.md
 
 # [DOMAIN-CODEX] 專案領域法典：{{title}}
 
 > [!IMPORTANT]
-> **四件套導航**：[全域憲法](../../../AGENTS.md) ｜ **領域法典 (本檔)** ｜ [工作暫存](./CONTEXT.md) ｜ [系統藍圖](./SPEC.md) ｜ [執行佇列](./TICKETS.md)  
+> **四件套導航**：**領域法典 (本檔)** ｜ [工作暫存](./CONTEXT.md) ｜ [系統藍圖](./SPEC.md) ｜ [執行佇列](./TICKETS.md)  
+> **全域憲法**：經 `~/.gemini/config/AGENTS.md` 自動繼承（SSOT 位於 `<WORKSPACE_ROOT>/Obsidian-SecondBrain-Template/AGENTS.md`）。  
 > **程式碼倉儲**：`<WORKSPACE_ROOT>/repos/{{title}}`（單倉自包含開發；不須 `.code-workspace`）  
 > **單向收緊鐵律**：僅能附加更嚴格之領域約束，嚴禁放寬全域憲法之測試、Git 衛生與 **本檔 $\le 50$ 行 / CONTEXT $\le 60$ 行** 硬上限。
 

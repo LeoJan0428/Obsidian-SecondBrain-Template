@@ -8,7 +8,7 @@
 
 ```text
 <WORKSPACE_ROOT>/
-├── Obsidian-SecondBrain-Template/   # 跨專案長青知識庫 + 全域 AgentOS (Skills / Hooks / AGENTS.md)
+├── Obsidian-SecondBrain-Template/         # 跨專案長青知識庫 + 全域 AgentOS (Skills / Hooks / AGENTS.md)
 │   ├── AGENTS.md                    # 全域憲法 (v3.0)，同步連結至 ~/.gemini/config/AGENTS.md
 │   ├── 00-AgentOS/                  # Skills / Hooks / Workflows / PROFILE / GLOSSARY
 │   ├── 02-Areas/                    # 跨專案長青知識資產
