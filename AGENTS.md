@@ -11,7 +11,7 @@
 ## 2. 工作流三級分流、Explore 豁免與顆粒度熔斷
 * **L1【微型維護】**（`< 30` 行、Typo、文檔微調）：讀專案 `AGENTS.md` $\to$ 實作 $\to$ 驗證 $\to$ 提交（免 SPEC/TICKETS、免儀式標頭）。
 * **L2【常規功能 / 除錯】**（單一模組／Ticket）：讀 `AGENTS.md` + `TICKETS.md` $\to$ `tdd`/`implement` $\to$ 驗證 $\to$ 提交 $\to$ `/handoff`。
-* **L3【新專案 / 跨模組重構】**：觸發顆粒度熔斷，先輸出架構邊界與 $\le 3$ 個子任務拆解，確認後依 `00-AgentOS/AGENT_GUIDE.md` 走 8 階流程。
+* **L3【新專案 / 跨模組重構】**：先查 `02-Areas/Software-Architecture/README.md` 命中架構模式卡，觸發顆粒度熔斷輸出架構邊界與 $\le 3$ 個子任務拆解，確認後依 `00-AgentOS/AGENT_GUIDE.md` 走 8 階流程。
 * **Explore 期豁免**：實驗原型依 `00-AgentOS/PROFILE.md` (`GLOBAL-01`) 採極簡驗證，免四件套與強制 TDD；觸發 Expand/Extract 訊號再升級守門。
 
 ## 3. 反迎合求真、條件式遙測與回合級外檢
@@ -32,4 +32,4 @@
 * **自動分支與 PR/CI 閉環**：綁定 GitHub Remote 且具 `.github/workflows/ci.yml` 時，L2/L3 若在 `main`/`master` 須開功能分支（`feat/`/`fix/`/`ci/`），驗證提交後推送開 PR 並以 `gh pr checks --watch` 監看至全綠燈交由人類合併（**嚴禁自動 Merge**）。
 
 ## 6. 委派索引 (Delegated SSOTs，基準路徑：`<WORKSPACE_ROOT>/Obsidian-SecondBrain-Template/`)
-* **8 階工作流**：[00-AgentOS/AGENT_GUIDE.md](./00-AgentOS/AGENT_GUIDE.md) ｜ **技能清冊**：[README.md](./README.md) ｜ **生命週期**：[00-AgentOS/workflows/PROJECT_LIFECYCLE.md](./00-AgentOS/workflows/PROJECT_LIFECYCLE.md) ｜ **Hooks**：[pre-commit](./00-AgentOS/hooks/pre-commit) / [commit-msg](./00-AgentOS/hooks/commit-msg)
+* **8 階工作流**：[00-AgentOS/AGENT_GUIDE.md](./00-AgentOS/AGENT_GUIDE.md) ｜ **架構模式庫**：[02-Areas/Software-Architecture/README.md](./02-Areas/Software-Architecture/README.md) ｜ **技能清冊**：[README.md](./README.md) ｜ **生命週期**：[00-AgentOS/workflows/PROJECT_LIFECYCLE.md](./00-AgentOS/workflows/PROJECT_LIFECYCLE.md) ｜ **Hooks**：[pre-commit](./00-AgentOS/hooks/pre-commit) / [commit-msg](./00-AgentOS/hooks/commit-msg)
