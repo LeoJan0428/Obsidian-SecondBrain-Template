@@ -15,7 +15,7 @@ description: 整理並壓縮對話上下文，執行知識升遷、50/60 行雙�
 2. **知識升遷與規則固化 (Promotion & Solidification)**：
    - **升遷至專案 `./AGENTS.md`**：若本次踩到永久性 API 邊界、資源洩漏或架構禁忌，提煉為 1–2 行 `MUST`/`NEVER` 條款插入 `[PROMOTION-ANCHOR]` 上方。
    - **觸頂固化**：若專案 `./AGENTS.md` 逼近或超過 **50 行**，必須將可自動化檢查的文字條款轉化為 Linter、型別約束或單元測試斷言，再精簡合併舊條文。
-   - **升遷至 `./SPEC.md` / Vault `02-Areas/`**：若敲定了資料結構、狀態機或演算法定案，同步至專案 `./SPEC.md`；若屬跨專案通用知識，提示抽離至知識庫 Vault 的 `02-Areas/`。
+   - **升遷至 `./SPEC.md` / Vault `02-Areas/`**：若敲定了資料結構、狀態機或演算法定案，同步至專案 `./SPEC.md`；若發現跨專案共通的架構雷點或邊界教訓，提示並回寫至知識庫 `02-Areas/Software-Architecture/` 對應模式卡（維持 $\le 100$ 行）或相關領域筆記。
 3. **更新並修剪 `./CONTEXT.md` ($\le 60$ 行硬上限)**：
    - 更新 `./CONTEXT.md`（舊版專案則為 `01-Projects/_active/<Project>/CONTEXT.md`）Frontmatter 的 `last_updated`。
    - 將本次完成事項加入「最近完成事項 (Recent Done)」，**嚴格只保留最近 3 筆**，更早項目於完成第 2 步升遷後移出（交由 Git Log 封存）。

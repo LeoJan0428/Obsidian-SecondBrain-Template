@@ -71,8 +71,8 @@ flowchart TD
 ## 5. `02-Areas/`、`_inbox/`、`03-Resources/`、`04-Archive/`、`05-Templates/`、`scripts/`
 
 * **`_inbox/`**：零阻力靈感與 Web Clipper 收集箱，透過 `/inbox-digest` 定期提煉並清零。
-* **`02-Areas/`**：跨專案可複用之長青領域知識（`AI-Agent/`、`Data-Analysis/`、`MCP/`、`Coursework/` 等）。
+* **`02-Areas/`**：跨專案可複用之長青領域知識（含 [Software-Architecture 系統架構模式庫](../02-Areas/Software-Architecture/README.md)、`AI-Agent/`、`Data-Analysis/`、`MCP/`、`Coursework/` 等）。
 * **`03-Resources/`**：外部參考文件、可複用代碼片段 (`snippets/`) 與 Obsidian 貼圖附件 (`attachments/`)。
 * **`04-Archive/`**：全庫唯一歷史封存真源，包含已結案專案治理封存（`projects/`）與參考資料庫。
-* **`05-Templates/`**：四件套範本（`Project_AGENTS_Template.md`、`Context_Template.md`、`Project_Template.md`）、`Knowledge_Template.md`、`Decision_Template.md`、`Research_Template.md` 與 `WebClipper_Template.md`。
+* **`05-Templates/`**：四件套範本（`Project_AGENTS_Template.md`、`Context_Template.md`、`Project_Template.md`）、`Architecture_Playbook_Template.md`、`Knowledge_Template.md`、`Decision_Template.md`、`Research_Template.md` 與 `WebClipper_Template.md`。
 * **`scripts/` & `tests/`**：`audit_vault.py` 與 `test_vault_health.py` 自動稽核行數上限、技能清冊同步、斷裂連結、Frontmatter 與 Hooks 換行格式。

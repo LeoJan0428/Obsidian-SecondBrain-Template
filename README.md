@@ -12,6 +12,7 @@
 │   ├── AGENTS.md                    # 全域憲法 (v3.0)，同步連結至 ~/.gemini/config/AGENTS.md
 │   ├── 00-AgentOS/                  # Skills / Hooks / Workflows / PROFILE / GLOSSARY
 │   ├── 02-Areas/                    # 跨專案長青知識資產
+│   │   └── Software-Architecture/   # 跨專案系統架構模式庫與避坑清單
 │   └── setup_skills_junctions.bat   # Windows 一鍵全域掛載腳本
 └── repos/                           # 各專案獨立自包含 Git 倉儲
     └── <專案>/                      # 直接同置程式碼、AGENTS.md、CONTEXT.md、SPEC.md、TICKETS.md 與 ci.yml
@@ -57,8 +58,8 @@ gh auth login
 | **`tdd`** | **測試驅動開發核心流程**（紅燈 $\to$ 綠燈 $\to$ 重構） | `/tdd`、功能與修復開發 | `pytest` |
 | **`implement`** | **鎖定單一工單執行實作**（自動帶動 TDD 循環） | `/implement <Ticket>` | 專案測試套件 |
 | **`code-review`** | **代碼變更雙軸度審查**（標準面 + 規格面） | `/code-review`、提交前檢核 | Git Diff, Linter |
-| **`grill-with-docs`** | **蘇格拉底式提問與需求對齊**（挑戰需求邊界） | `/grill-with-docs` | 知識庫檢索 |
-| **`to-spec`** | **產出 SPEC.md 並同步冷啟動專案 `AGENTS.md`** | `/to-spec` | Markdown |
+| **`grill-with-docs`** | **蘇格拉底式提問與需求對齊**（優先路由架構模式卡與避坑清單，挑戰需求邊界） | `/grill-with-docs` | 知識庫架構路由 |
+| **`to-spec`** | **產出 SPEC.md（含架構模式與 ADR 取捨）並同步冷啟動專案 `AGENTS.md`** | `/to-spec` | Markdown |
 | **`to-tickets`** | **將 SPEC 拆解為 Given/When/Then 微型工單** | `/to-tickets` | Markdown |
 | **`handoff`** | **知識升遷、50/60 行雙上限校驗與 `CONTEXT.md` 交接** | `/handoff`、20+ 輪防衰退 | Git Log, `CONTEXT.md` |
 | **`ask-matt`** | **AgentOS 技能與系統架構諮詢助手** | `/ask-matt` | 知識庫參照 |
@@ -68,6 +69,7 @@ gh auth login
 ## 📚 系統核心文件導覽
 
 * 🤖 **AI Agent 核心規範**：[AGENTS.md](./AGENTS.md) ｜ [00-AgentOS/AGENT_GUIDE.md](./00-AgentOS/AGENT_GUIDE.md) ｜ [00-AgentOS/PROFILE.md](./00-AgentOS/PROFILE.md)
+* 🏗️ **系統架構模式庫**：[02-Areas/Software-Architecture/README.md](./02-Areas/Software-Architecture/README.md) ｜ [05-Templates/Architecture_Playbook_Template.md](./05-Templates/Architecture_Playbook_Template.md)
 * 🧭 **每日決策看板**：[DASHBOARD.md](./DASHBOARD.md) ｜ [PROJECTS_WAR_ROOM.canvas](./PROJECTS_WAR_ROOM.canvas)
 * 🛠️ **Obsidian 與環境開箱**：[SETUP.md](./SETUP.md) ｜ [UserGuide/SETUP_GUIDE.md](./UserGuide/SETUP_GUIDE.md)
 * 👤 **人類操作手冊與元件說明**：[UserGuide/USER_GUIDE.md](./UserGuide/USER_GUIDE.md) ｜ [UserGuide/SYSTEM_COMPONENTS.md](./UserGuide/SYSTEM_COMPONENTS.md)
