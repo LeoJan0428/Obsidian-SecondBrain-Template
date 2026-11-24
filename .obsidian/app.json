@@ -15,6 +15,12 @@
     "**/data/**",
     "**/*.parquet",
     "**/*.pkl",
-    "**/*.npy"
+    "**/*.npy",
+    "**/.ruff_cache/**",
+    "scripts/**",
+    "tests/**",
+    ".agents/**",
+    ".claude/**",
+    ".cursor/**"
   ]
 }

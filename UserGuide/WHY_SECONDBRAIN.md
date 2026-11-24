@@ -1,23 +1,21 @@
 # 🌟 知識庫核心特色、痛點解決與實際證明 (WHY_SECONDBRAIN.md)
 
-本文件向你說明本系統（SecondBrain AI Operating System）的**核心特色**、**解決了傳統 AI 開發的哪些重大痛點**，以及**具體的數據與場景證明**。
+本文件說明 **SecondBrain (v3.0)** 的核心架構特色、解決了傳統 AI 開發的哪些痛點，以及實戰驗證依據。
 
 ---
 
 ## 🎯 一、 核心特色 (Core Features)
 
-1. **AI-First & Multi-Agent 原生相容**：
-   不綁定單一 AI 工具。Claude Code、Cursor、Gemini、Antigravity 皆能透過根目錄 [AGENTS.md](../AGENTS.md) 與 Windows NTFS 傳送門架構零摩擦快速接手。
-2. **人機檔案分流 (Human-Agent Separation)**：
-   人類專心看 `UserGuide/`，AI 自動遵循 `00-AgentOS/` 與 `AGENTS.md`，互不干擾、界面極度乾淨。
-3. **內建軟體工程紀律 (AgentOS Workflow)**：
-   整合 `mattpocock/skills`，禁止 AI 瞎猜（Vibe Coding），強制走「提問 $\rightarrow$ 規格 $\rightarrow$ 任務卡片 $\rightarrow$ TDD 測試 $\rightarrow$ 代碼審查」流程。
-4. **極致 Token 優化 (Lazy Loading & Shared Language)**：
-   透過 30 秒分層加載與共享術語庫，省下 90% 以上無意義的 Context 消耗。
-5. **技能單一事實來源 (Windows NTFS Directory Junction)**：
-   技能實體唯一保存在 `00-AgentOS/skills/`，你在 Obsidian 裡隨時能看能改，底層自動傳送給所有 AI 工具，杜絕手動複製維護地獄。
-6. **Git 本地硬約束守門 (Pre-Commit Shield)**：
-   透過 `.git/hooks/pre-commit` 自動阻擋敏感金鑰與快取，用程式碼硬約束取代人類或 AI 的口頭自律。
+1. **單倉自包含 + 全域 AgentOS 掛載**：
+   專案程式碼與四件套同置於獨立 Git 倉儲（`repos/<專案>/`），透過 `~/.gemini/config/` HardLink 與 NTFS Junction 自動繼承全域憲法與 14 大技能，不需維護 `.code-workspace`。
+2. **AI-First & Multi-Agent 原生相容**：
+   Antigravity、Claude Code、Cursor、Aider 與 Copilot 透過根目錄 [AGENTS.md](../AGENTS.md)、`CLAUDE.md`、`.aider.conf.yml`、`.windsurfrules` 與 `.github/copilot-instructions.md` 共用同一套規則與技能傳送門。
+3. **人機分流與三級工作流 (L1 / L2 / L3)**：
+   人類看 `UserGuide/` 與 `DASHBOARD.md`，AI 依任務規模自動在 L1 極速修補、L2 TDD 開發與 L3 8 階工作流間切換，兼顧速度與紀律。
+4. **極致 Token 優化 (30 秒 Fast Onboarding & Shared Language)**：
+   以 `AGENTS.md`（$\le 50$ 行）+ `CONTEXT.md`（$\le 60$ 行）雙上限控制，搭配 [GLOSSARY.md](../00-AgentOS/GLOSSARY.md) 共享術語庫，避免每次開對話重新掃描整個 Repo。
+5. **全域 Git 雙守門與自動化健康稽核**：
+   受版控於 [00-AgentOS/hooks/](../00-AgentOS/hooks/) 的 `pre-commit` / `commit-msg` 在本機所有專案統一防呆，搭配 Vault 自身的自動化健康檢查腳本守住連結與行數上限。
 
 ---
 
@@ -25,44 +23,22 @@
 
 | 傳統 AI 開發痛點 | 本系統的解決方案 | 帶來的直接效益 |
 | :--- | :--- | :--- |
-| **痛點 1：AI 每次都失憶**<br>開新視窗就要重新跟 AI 解釋專案在做什麼。 | **`CONTEXT.md` 即時狀態檔**<br>記錄最新進度、下一步與卡點。 | **30 秒接手**，新 AI 一讀就能立刻動工，不必重講前因後果。 |
-| **痛點 2：Token 浪費極大**<br>AI 漫無目的讀取幾百個檔案或廢話解釋名詞。 | **分層讀取 + `GLOSSARY.md`**<br>限制讀取層級，專有名詞直接引述。 | **降低 95%+ Token 成本**，大幅提升推論速度與回答品質。 |
-| **痛點 3：跨工具技能版本不同步**<br>Obsidian 藏檔、AI 讀特定目錄，每次更新得複製好幾處。 | **Windows NTFS Junction 傳送門**<br>實體唯一存於 `00-AgentOS/skills`。 | **修改一次，全工具即時同步**，完全零管理員權限門檻。 |
-| **痛點 4：AI 憑感覺寫程式 (Vibe Coding)**<br>AI 盲目修改代碼，一改就壞、沒有測試。 | **AgentOS 8 階工作流**<br>先蘇格拉底提問確認規格，再寫單元測試。 | **代碼穩定性大幅提升**，避免反覆 Debug 的惡性循環。 |
-| **痛點 5：長對話後誤提金鑰或快取**<br>對話過長時 AI 忘記規則，把 `.env` 或 `__pycache__` commit 進去。 | **Git Pre-Commit Hook 硬約束**<br>終端層級腳本自動攔截無效提交。 | **100% 杜絕污物與機密洩漏**，保持 Git 歷史純淨。 |
-| **痛點 6：專案做完經驗就散落**<br>上次寫好的量化/演算法邏輯，下個專案又從頭寫。 | **`02-Areas/` 知識沉澱 + WikiLinks**<br>通用模組與經驗自動歸檔。 | **個人資產複利增長**，寫越久專案開發越快。 |
+| **痛點 1：AI 每次都失憶**<br>開新視窗就要重新解釋專案現況。 | **`CONTEXT.md` 60 行滾動窗口**<br>記錄目標、最近 3 筆完成項與下一步。 | **30 秒接手**，無須重講前因後果。 |
+| **痛點 2：Token 浪費極大**<br>AI 漫無目的掃描原始碼與資料夾。 | **分層讀取 + 禁止掃描 `data/`**<br>先讀 $\le 110$ 行上下文，結構看 `tests/fixtures/`。 | **顯著降低無效 Token 消耗**與誤判機率。 |
+| **痛點 3：跨工具技能與規範不同步**<br>更新一次得手動複製到多個工具目錄。 | **Windows Junction + HardLink SSOT**<br>實體統一存於 `AGENTS.md` 與 `00-AgentOS/skills/`。 | **修改一次，全工具與獨立 Repo 即刻同步**。 |
+| **痛點 4：AI 憑感覺亂改 (Vibe Coding)**<br>沒確認邊界就寫大量代碼、缺測試。 | **L3 8 階工作流 + 兩次失敗熔斷**<br>先釐清與寫測試，連錯 2 次強制停手診斷。 | **代碼穩定性高**，避免 Doom Loop 燒光額度。 |
+| **痛點 5：誤提金鑰或污染歷史**<br>將 `.env`、`__pycache__` 或 API Key 提交入庫。 | **全域 `core.hooksPath` 雙守門**<br>自動阻擋機密檔、金鑰樣式、大檔與 AI 水印。 | **從終端層級攔截外洩風險**，保持提交歷史乾淨。 |
+| **痛點 6：做完專案經驗就散落**<br>踩坑解法與架構模式無法跨專案累積。 | **`/handoff` 升遷 + `02-Areas/` 長青庫**<br>永久禁忌寫入 `AGENTS.md`，通用方法存回 Vault。 | **知識資產複利增長**。 |
 
 ---
 
-## 📊 三、 實際證明與實測數據 (Concrete Proof & Evidence)
+## 📊 三、 實戰架構設計對照
 
-### 證明 1：Token 消耗與成本實測（節省 99% Token）
+### 對照 1：30 秒分層上下文載入
+* **傳統做法**：新對話開始後遍歷整個 `src/` 與歷史紀錄才能定位當前任務。
+* **SecondBrain 做法**：Agent 先讀取專案 `AGENTS.md`（$\le 50$ 行）+ `CONTEXT.md`（$\le 60$ 行），共 $\le 110$ 行即可精準定位當前 Ticket、不變量禁忌與驗證指令，僅在涉及架構或任務拆解時按需加載 `SPEC.md` 與 `TICKETS.md`。
 
-以一個包含 30 個原始碼檔案的現成專案為例，當你問 AI「我們現在做到哪？下一步做什麼？」：
-
-```text
-【傳統做法】AI 掃描整個專案原始碼尋找進度
-└─ 讀取整個 src/ (30 檔): ~45,000 Tokens
-└─ 花費時間: 15 ~ 25 秒
-└─ 成本費用: 每次發問消耗約 $0.15 ~ $0.30 美元
-
-【SecondBrain 做法】AI 依據 AGENTS.md 30秒協定只讀取 CONTEXT.md
-└─ 讀取 CONTEXT.md (單一檔案約 40 行): ~350 Tokens
-└─ 花費時間: 1 ~ 2 秒
-└─ 成本費用: 每次發問不到 $0.002 美元
-```
-👉 **實際證明：Token 消耗降低 99.2%，回應速度提升 10 倍以上！**
-
----
-
-### 證明 2：跨工具切換零摩擦實測（無痛無縫接軌）
-
-* **情境**：在電腦用 Cursor 開發到一半，出門切換到命令列用 Claude Code，或是使用 Antigravity。
-* **本系統實際運作**：
-  1. 離開前輸入 `/handoff`，AI 自動將記憶壓縮寫進目標專案的 `CONTEXT.md`。
-  2. 換任何工具開啟時：
-     * **Antigravity / Gemini**：讀取根目錄 `AGENTS.md` 與 `GEMINI.md`。
-     * **Claude Code**：讀取根目錄 `CLAUDE.md`（內含 `@AGENTS.md`）。
-     * **Cursor**：讀取根目錄 `AGENTS.md` 與 `.cursorrules`。
-  3. 所有工具呼叫 `/tdd` 或 `/code-review` 時，底層全部經由 Windows Junction 聯結至同一個實體技能目錄 `00-AgentOS/skills/`。
-👉 **實際證明：零環境設定阻礙，跨工具、跨工作階段完全不掉進度，也不會讀到過期的技能版本。**
+### 對照 2：跨工具與獨立 Repo 零摩擦切換
+1. 在任一 `<WORKSPACE_ROOT>/repos/<專案>/` 開啟 Antigravity、Cursor、Claude Code 或 Aider。
+2. 全域 `~/.gemini/config/AGENTS.md` 與 `00-AgentOS/skills/` 透過作業系統層級的 HardLink / NTFS Junction 直接生效，無須在每個新專案重複維護全域規範或複製技能腳本。
+3. 收工執行 `/handoff` 更新 `./CONTEXT.md` 並完成知識升遷，下一個工作階段或另一套 AI 工具即可無縫接續。

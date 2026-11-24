@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # ==============================================================================
-# 🛡️ SecondBrain Git Commit-Msg Sanitize & Format Hook
+# 🛡️ SecondBrain Git Commit-Msg Sanitize & Format Hook (v3.1)
 # ==============================================================================
 
 COMMIT_MSG_FILE="$1"
@@ -9,8 +9,10 @@ if [ -z "$COMMIT_MSG_FILE" ] || [ ! -f "$COMMIT_MSG_FILE" ]; then
     exit 0
 fi
 
-# 1. In-place strip AI watermarks & co-authored tags (preserving commit content)
-sed -i -E '/^[[:space:]]*([Cc]o-[Aa]uthored-[Bb]y|[Ss]igned-[Oo]ff-[Bb]y|[Gg]enerated ([Bb]y|[Ww]ith)|[Aa][Ii]-[Gg]enerated|[Cc]laude [Cc]ode|[Cc]ursor)/d' "$COMMIT_MSG_FILE"
+# 1. Strip AI watermarks & co-authored trailers portably (preserving Signed-off-by & prose)
+TMP_MSG="$(mktemp)"
+grep -Ev '^[[:space:]]*([Cc]o-[Aa]uthored-[Bb]y[[:space:]]*:|[Gg]enerated ([Bb]y|[Ww]ith)[[:space:]]+.*([Cc]laude|[Cc]ursor|[Cc]opilot|[Gg]emini|[Aa]ntigravity|[Aa]ider|[Aa][Ii])|[Aa][Ii]-[Gg]enerated[[:space:]]*:)' "$COMMIT_MSG_FILE" > "$TMP_MSG" || true
+mv "$TMP_MSG" "$COMMIT_MSG_FILE"
 
 # 2. Extract first non-comment, non-empty line
 FIRST_LINE=$(grep -v '^[[:space:]]*#' "$COMMIT_MSG_FILE" | grep -v '^[[:space:]]*$' | head -n 1)
@@ -20,18 +22,27 @@ if [ -z "$FIRST_LINE" ]; then
     exit 1
 fi
 
-# 3. Validate Conventional Commits format
-CONVENTIONAL_PATTERN="^(feat|fix|docs|refactor|chore|test)(\([a-zA-Z0-9_-]+\))?: .+"
+# 3. Allow standard Git auto-generated messages or enforce Conventional Commits
+CONVENTIONAL_PATTERN="^(feat|fix|docs|refactor|chore|test|ci|build|perf|style|revert)(\([a-zA-Z0-9_./-]+\))?!?: .+"
+GIT_AUTO_PATTERN='^(Merge (branch|pull request|remote-tracking branch|tag) |Revert ".+"|(fixup|squash|amend)! .+)'
 
-if ! echo "$FIRST_LINE" | grep -E -q "$CONVENTIONAL_PATTERN"; then
+if ! printf '%s\n' "$FIRST_LINE" | grep -E -q "$GIT_AUTO_PATTERN" && \
+   ! printf '%s\n' "$FIRST_LINE" | grep -E -q "$CONVENTIONAL_PATTERN"; then
     echo "🛑 [GIT COMMIT-MSG ERROR] Invalid Commit Subject format!"
     echo "   Current        : $FIRST_LINE"
     echo ""
     echo "   Expected format: <type>(<scope>): <subject>"
-    echo "   Allowed types  : feat | fix | docs | refactor | chore | test"
+    echo "   Allowed types  : feat | fix | docs | refactor | chore | test | ci | build | perf | style | revert"
     echo "   Example        : feat(stock): 新增動態價格階梯"
     echo "   Example        : docs(agentos): 更新 CONTEXT.md 任務狀態"
     exit 1
+fi
+
+# 4. Chain repo-local commit-msg hook if present (using --git-dir to bypass global core.hooksPath)
+GIT_DIR_PATH="$(git rev-parse --git-dir 2>/dev/null || true)"
+LOCAL_HOOK="$GIT_DIR_PATH/hooks/commit-msg"
+if [ -n "$GIT_DIR_PATH" ] && [ -x "$LOCAL_HOOK" ] && [ ! "$LOCAL_HOOK" -ef "$0" ]; then
+    "$LOCAL_HOOK" "$COMMIT_MSG_FILE" || exit $?
 fi
 
 exit 0

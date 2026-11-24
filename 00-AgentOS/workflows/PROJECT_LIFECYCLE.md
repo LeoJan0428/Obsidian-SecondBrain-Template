@@ -8,6 +8,7 @@
 
 1. **活躍開發區（預設）：`<WORKSPACE_ROOT>/repos/<ProjectName>/`**
    - 程式碼、測試、`.github/workflows/ci.yml` 與治理四件套（`AGENTS.md` $\le 50$ 行、`CONTEXT.md` $\le 60$ 行、`SPEC.md`、`TICKETS.md`）直接同置於單一 Git 倉儲，無須建立 `.code-workspace`。
+   - 若需在 Obsidian 總覽追蹤，於 Vault 的 [01-Projects/PROJECTS_REGISTRY.md](../../01-Projects/PROJECTS_REGISTRY.md) 登記一行索引即可（SSOT 仍保留於各 Repo 根目錄 `CONTEXT.md`）。
    - 若專案預計設為 Public，請將 `CONTEXT.md`、`TICKETS.md` 加入 `.gitignore`；舊版存放於 `01-Projects/_active/<ProjectName>/` 的歷史專案仍維持相容。
 
 2. **統一封存區：`04-Archive/projects/<ProjectName>/`**

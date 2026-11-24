@@ -1,11 +1,13 @@
 ---
-title: "[Knowledge Title]"
-tags: [knowledge, ai, mcp]
-created_at: "{{date}}"
+title: "{{title}}"
+type: concept
+category: "General"
 domain: "[[02-Areas/AI-Agent/README]]"
+tags: [knowledge, ai, mcp]
+last_updated: "{{date}}"
 ---
 
-# 💡 {{Knowledge Title}}
+# 💡 {{title}}
 
 ## 核心概念 (Core Concept)
 - 參閱術語: [[GLOSSARY#MCP|MCP]]
@@ -14,4 +16,4 @@ domain: "[[02-Areas/AI-Agent/README]]"
 - 
 
 ## 關聯筆記 (Related Notes)
-- [[Link]]
+- （連結至相關概念筆記或領域 README）

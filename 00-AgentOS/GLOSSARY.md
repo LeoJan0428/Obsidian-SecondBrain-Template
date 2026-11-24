@@ -19,7 +19,7 @@
 
 ### Memory (代理記憶)
 * **短期記憶**：當前對話歷史與載入的 `CONTEXT.md`。
-* **長期記憶**：Obsidian `SecondBrain/` 檔案庫與 `Smart Connections` 本地向量索引。
+* **長期記憶**：Obsidian 知識庫長青筆記（`02-Areas/`）與雙向連結語意網格（選配語意檢索外掛）。
 
 ### Tool Call / Function Calling (工具呼叫)
 * **定義**：LLM 輸出特定 JSON 結構以調用外部 API、執行 Shell 指令或讀寫檔案的能力。
@@ -35,7 +35,7 @@
 * **定義**：透過外部資料庫檢索相關文檔片段（Chunks），並作為 Prompt 注入 LLM 以提高回答準確度並減少幻覺（Hallucination）。
 
 ### Vector DB / Embedding (向量資料庫與嵌入)
-* **定義**：將文字轉換為高維向量（Vector）並計算餘弦相似度（Cosine Similarity），用於語意搜尋。本知識庫使用 `Smart Connections` 進行本地端 Embedding 索引。
+* **定義**：將文字轉換為高維向量（Vector）並計算餘弦相似度（Cosine Similarity），用於語意搜尋。本知識庫可選配本地 Embedding 社群外掛建立語意檢索索引。
 
 ---
 
@@ -58,7 +58,7 @@
 ## 🧠 知識管理與系統
 
 ### WikiLinks (Obsidian 雙向連結)
-* **定義**：`[[Note Name]]` 格式。用於在 SecondBrain 中建立原子筆記之間的語意網格，方便 Smart Connections 計算關聯度。
+* **定義**：`[[Note Name]]` 格式。用於在 SecondBrain 中建立原子筆記之間的語意網格，方便 Obsidian Graph View 與語意檢索建立關聯。
 
 ### Lazy Context Loading (分層加載)
 * **定義**：Agent 先讀取 30 秒 `CONTEXT.md`，僅在需要時才讀取深層文檔與程式碼，避免一次載入過多背景資料。
